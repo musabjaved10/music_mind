@@ -6,6 +6,7 @@ class MyTextField extends StatefulWidget {
   var hintText, label;
   bool? obsecure;
   int? maxlines;
+  VoidCallback? onSaved;
   TextEditingController? controller = TextEditingController();
 
   MyTextField({Key? key,
@@ -33,6 +34,10 @@ class _MyTextFieldState extends State<MyTextField> {
             height: 10,
           ),
           TextFormField(
+            onChanged: (value){
+              print(value);
+              widget.controller?.text = value;
+            },
             textAlignVertical: TextAlignVertical.center,
             cursorColor: KSecondaryColor,
             maxLines: widget.maxlines,

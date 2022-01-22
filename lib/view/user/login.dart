@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:music_mind_client/view/user/register.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 import 'package:music_mind_client/view/widgets/my_text_field.dart';
 
-class Login extends StatelessWidget {
+class Login extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,15 +26,17 @@ class Login extends StatelessWidget {
               children: [
                 MyTextField(
                   label: 'Email',
-                  hintText: 'example@example.com',
+                  hintText:  controller.emailController.text.isEmpty ?'email@example.com' : controller.emailController.text,
+                  controller: controller.emailController,
                 ),
                 const SizedBox(
                   height: 30,
                 ),
                 MyTextField(
                   label: 'Password',
-                  hintText: '********',
+                  hintText: controller.passController.text.isEmpty ? '********': '*' * controller.passController.text.length,
                   obsecure: true,
+                  controller: controller.passController,
                 ),
                 MyText(
                   text: 'Forgot Passoword?',
@@ -43,7 +46,7 @@ class Login extends StatelessWidget {
               ],
             ),
             MyButton(
-              onPressed: () => Get.to(() => BottomNavBar()),
+              onPressed: () {controller.login(controller.emailController.text, controller.passController.text);},
               text: 'Login',
             ),
             MyText(

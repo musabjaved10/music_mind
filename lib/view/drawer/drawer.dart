@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/view/profile/account.dart';
 import 'package:music_mind_client/view/profile/subscriptions_pricing.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
@@ -12,6 +13,7 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   bool? profileVisibility = false;
+  AuthController _authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               ListTile(
                 title: MyText(
-                  text: 'Antonie Robbinson',
+                  text: _authController.user,
                   size: 18,
                   weight: FontWeight.w600,
                 ),
@@ -153,12 +155,17 @@ class _MyDrawerState extends State<MyDrawer> {
               const SizedBox(
                 height: 50,
               ),
-              MyText(
-                text: 'Logout',
-                size: 14,
-                weight: FontWeight.w700,
-                color: const Color(0xffEA4335),
-                align: TextAlign.center,
+              GestureDetector(
+                onTap: (){
+                  _authController.signOut();
+                },
+                child: MyText(
+                  text: 'Logout',
+                  size: 14,
+                  weight: FontWeight.w700,
+                  color: const Color(0xffEA4335),
+                  align: TextAlign.center,
+                ),
               )
             ],
           ),

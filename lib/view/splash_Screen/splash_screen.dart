@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/utils/root.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:music_mind_client/view/widgets/logo.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(const Duration(seconds: 3), () => Get.off(() => Login()));
+    Timer(const Duration(seconds: 3), () => Get.off(() => Root()));
   }
 
   @override
