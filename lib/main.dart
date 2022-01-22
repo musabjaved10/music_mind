@@ -10,9 +10,11 @@ import 'package:music_mind_client/view/home/mind/mind_missions/mind_missions.dar
 import 'package:music_mind_client/view/splash_Screen/splash_screen.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:music_mind_client/view/user/register.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   runApp(MusicMindApp());
 }
