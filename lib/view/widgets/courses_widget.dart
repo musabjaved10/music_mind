@@ -63,7 +63,7 @@ class CoursesWidget extends StatelessWidget {
                                     color: KPrimaryColor,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
-                                      child: Image.asset(
+                                      child: Image.network(
                                         '${thumbnails.courseThumbnail}',
                                         fit: BoxFit.cover,
                                         width: Get.width,

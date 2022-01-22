@@ -75,9 +75,10 @@ class AuthController extends GetxController{
         update();
         Get.offAll(() => BottomNavBar());
 
-      }else if((resData['response'] !=200) && (resData['errors'] != null)){
+      }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
         print('oops');
         print(resData['errors'].keys.toList().first);
+        Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
         FirebaseAuth.instance.currentUser!.delete();
       }
 
@@ -117,5 +118,9 @@ class AuthController extends GetxController{
 
  void signOut() async{
    await _auth.signOut().then((value) => Get.offAll(()=> Login()));
+ }
+
+ getUserId(){
+   return _firebaseUser.value?.uid;
  }
 }

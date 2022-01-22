@@ -3,11 +3,32 @@ import 'package:get/get.dart';
 import 'package:music_mind_client/controller/home_controller/learn_controller/learn_controller.dart';
 import 'package:music_mind_client/view/widgets/courses_widget.dart';
 
-class Learn extends StatelessWidget {
+class Learn extends StatefulWidget {
+  @override
+  State<Learn> createState() => _LearnState();
+}
+
+class _LearnState extends State<Learn> {
   final LearnController _learnController = Get.put(LearnController());
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Create anonymous function:
+        () async {
+      _isLoading = true;
+      await _learnController.getCourses();
+      _isLoading = false;
+      setState(() {
+        // Update your UI with the desired changes.
+        return;
+      });
+    } ();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CoursesWidget(controller: _learnController);
+    return _isLoading ? Center(child: CircularProgressIndicator(color: Colors.white,),) : CoursesWidget(controller: _learnController);
   }
 }

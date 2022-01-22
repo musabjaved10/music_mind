@@ -3,11 +3,32 @@ import 'package:get/get.dart';
 import 'package:music_mind_client/controller/home_controller/sleep_controller/sleep_controller.dart';
 import 'package:music_mind_client/view/widgets/courses_widget.dart';
 
-class Sleep extends StatelessWidget {
+class Sleep extends StatefulWidget {
+  @override
+  State<Sleep> createState() => _SleepState();
+}
+
+class _SleepState extends State<Sleep> {
   final SleepController _sleepController = Get.put(SleepController());
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Create anonymous function:
+        () async {
+      _isLoading = true;
+      await _sleepController.getCourses();
+      _isLoading = false;
+      setState(() {
+        // Update your UI with the desired changes.
+        return;
+      });
+    } ();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CoursesWidget(controller: _sleepController);
+    return _isLoading ? Center(child: CircularProgressIndicator(color: Colors.white,),) : CoursesWidget(controller: _sleepController);;
   }
 }
