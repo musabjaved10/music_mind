@@ -14,6 +14,19 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   bool? profileVisibility = false;
   AuthController _authController = Get.find<AuthController>();
+  @override
+  void initState(){
+        () async {
+      await _authController.getUserData();      
+      if(mounted) {
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
+    } ();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +42,12 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               ListTile(
                 title: MyText(
-                  text: _authController.user,
+                  text: _authController.userData['display_name'],
                   size: 18,
                   weight: FontWeight.w600,
                 ),
                 subtitle: MyText(
-                  text: 'Join date: Oct 10 2021',
+                  text: 'Join date: Jan 2022',
                   color: KGreyColor,
                   size: 12,
                 ),

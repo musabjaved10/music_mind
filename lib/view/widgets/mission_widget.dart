@@ -13,7 +13,7 @@ class MissionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
+    return controller.missions.isEmpty ? const Center(child: Text('No missions yet.'),) : Obx(() {
       return ListView(
         padding: const EdgeInsets.only(bottom: 30,left: 7,right: 7),
         shrinkWrap: true,
@@ -105,7 +105,7 @@ class MissionsWidget extends StatelessWidget {
                       height: 15,
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -114,8 +114,8 @@ class MissionsWidget extends StatelessWidget {
                             children: [
                               MyText(
                                 text: '${_missionsData.missionName}',
-                                size: 18,
-                                weight: FontWeight.w700,
+                                size: 15,
+                                weight: FontWeight.w600,
                               ),
                             ],
                           ),

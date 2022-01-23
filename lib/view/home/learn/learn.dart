@@ -10,19 +10,20 @@ class Learn extends StatefulWidget {
 
 class _LearnState extends State<Learn> {
   final LearnController _learnController = Get.put(LearnController());
-  var _isLoading = false;
+  var _isLoading = true;
 
   @override
   void initState() {
     // Create anonymous function:
         () async {
-      _isLoading = true;
       await _learnController.getCourses();
       _isLoading = false;
-      setState(() {
-        // Update your UI with the desired changes.
-        return;
-      });
+      if(mounted){
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
     } ();
     super.initState();
   }

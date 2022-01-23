@@ -10,14 +10,13 @@ class Work extends StatefulWidget {
 
 class _WorkState extends State<Work> {
   final WorkController _workController = Get.put(WorkController());
-  var _isLoading = false;
+  var _isLoading = true;
 
 
   @override
   void initState() {
     // Create anonymous function:
         () async {
-      _isLoading = true;
       await _workController.getCourses();
       _isLoading = false;
       setState(() {

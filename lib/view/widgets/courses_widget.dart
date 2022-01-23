@@ -14,7 +14,7 @@ class CoursesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
+    return  Obx(
       () {
         return ListView.builder(
           shrinkWrap: true,

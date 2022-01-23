@@ -10,18 +10,20 @@ import 'package:http/http.dart' as http;
 class SleepController extends GetxController {
   AuthController _authController = Get.find<AuthController>();
   int currentIndex = 0;
-  List my_courses = [].obs;
   List coursesData = [].obs;
 
 
   getCourses() async{
-    final url = Uri.parse('${dotenv.env['db_url']}/category/2');
+    List my_courses = [].obs;
+
+    final url = Uri.parse('${dotenv.env['db_url']}/category/8');
 
     try{
-      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}"});
+      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}", "api-key": "${dotenv.env['api_key']}"});
       final resData = jsonDecode(res.body);
       if(resData['response'] == 200){
         final courses = resData['success']['data']['category']['courses'];
+
 
         // for (int i = 0; i < courses.length; i++) {
         //   CoursesWidgetModel(
@@ -37,11 +39,13 @@ class SleepController extends GetxController {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];
           // print(course['levels']);
           course['levels'].forEach((level){
-            coursesThumbnailList.add(CoursesThumbnailsModel(courseThumbnail:level['display_pic'] ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
+            coursesThumbnailList.add(CoursesThumbnailsModel(levelId: level['level_id'],
+                courseThumbnail:"${dotenv.env['db_url']}/${level['display_pic']}" ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
           });//inside foreach ends
           my_courses.add(CoursesWidgetModel(
-              courseIcon: 'assets/bxbxs-brain.png',
-              courseType: 'Mind',
+              courseId: course['course_id'],
+              courseIcon: 'assets/2.png',
+              courseType: 'Sleep',
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
@@ -50,8 +54,9 @@ class SleepController extends GetxController {
         });
         coursesData = my_courses;
         // print(coursesData);
-      }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
-        Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+      }else if((resData['response'] !=200) && (resData['errors'] != null)){
+        _authController.signOut();
+        Get.snackbar('Error', resData['errors']['cat'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
       }
     }catch(e){
       print('whoops');

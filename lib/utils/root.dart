@@ -8,6 +8,7 @@ import 'package:music_mind_client/controller/home_controller/sleep_controller/sl
 import 'package:music_mind_client/controller/home_controller/work_controller/work_controller.dart';
 import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:music_mind_client/view/user/login.dart';
+import 'package:music_mind_client/view/user/register.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -16,28 +17,22 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   var _isLoading = false;
-  final MindController _mindController = Get.put(MindController());
-  final BodyController _bodyController = Get.put(BodyController());
-  final SleepController _sleepController = Get.put(SleepController());
-  final LearnController _learnController = Get.put(LearnController());
-  final WorkController _workController = Get.put(WorkController());
-
   @override
   void initState() {
-    // Create anonymous function:
-        () async {
-          _isLoading = true;
-      await _mindController.getCourses();
-       _bodyController.getCourses();
-       _sleepController.getCourses();
-       _learnController.getCourses();
-       _workController.getCourses();
-          _isLoading = false;
-      setState(() {
-        // Update your UI with the desired changes.
-        return;
-      });
-    } ();
+    _isLoading = true;
+    () async {
+      // print('hello there **********');
+      await Future.delayed(Duration(seconds: 1));
+      _isLoading = false;
+      if(mounted) {
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
+
+    }();
+
     super.initState();
   }
 
@@ -48,11 +43,11 @@ class _RootState extends State<Root> {
           ? Login()
           : _isLoading
               ? Scaffold(
-                body: Center(
-                    child: CircularProgressIndicator(
+                  body: Center(
+                      child: CircularProgressIndicator(
                     color: Colors.white,
                   )),
-              )
+                )
               : BottomNavBar();
     });
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text_field.dart';
 
-class Account extends StatelessWidget {
+class Account extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,45 +36,47 @@ class Account extends StatelessWidget {
             height: 40,
           ),
           MyTextField(
-            label: 'Display Name',
-            hintText: 'Antonie Robbinson',
-          ),
+              label: 'Display Name',
+              hintText: '${controller.userData['display_name']}',
+              controller: controller.displayController),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
-            label: 'First Name',
-            hintText: 'Antonie',
-          ),
+              label: 'First Name',
+              hintText: '${controller.userData['first_name']}',
+              controller: controller.firstNameController),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
-            label: 'Last Name',
-            hintText: 'Robbinson',
-          ),
+              label: 'Last Name',
+              hintText: '${controller.userData['last_name']}',
+              controller: controller.lastNameController),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
             label: 'Email',
-            hintText: 'example@example.com',
+            hintText: '${controller.userData['email']}',
+            controller: controller.emailController,
           ),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
-            label: 'Phone',
-            hintText: '123456789',
-          ),
+              label: 'Phone',
+              hintText: '${controller.userData['phone'] ?? 'Add your phone'}',
+              controller: controller.phoneController),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
-            maxlines: 10,
-            label: 'About',
-            hintText: 'Hi I’m a student form Turkey',
-          ),
+              maxlines: 10,
+              label: 'About',
+              hintText:
+                  '${controller.userData['about'] ?? 'Introduce yourself...'}',
+              controller: controller.aboutController),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

@@ -18,7 +18,7 @@ class WorkMissionController extends GetxController {
     final url = Uri.parse('${dotenv.env['db_url']}/level/$levelId');
     print(url);
     try{
-      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}"});
+      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}", "api-key": "${dotenv.env['api_key']}"});
       final resData = jsonDecode(res.body);
       if(resData['response'] == 200){
         final level = resData['success']['data']['level'];
@@ -39,7 +39,7 @@ class WorkMissionController extends GetxController {
 
         // print(level_missions);
 
-      }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
+      }else if((resData['response'] !=200) && (resData['errors'] != null)){
         Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
       }
     }catch(e){

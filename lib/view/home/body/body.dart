@@ -10,19 +10,20 @@ class Boddy extends StatefulWidget {
 
 class _BoddyState extends State<Boddy> {
   final BodyController _bodyController = Get.put(BodyController());
-  var _isLoading = false;
+  var _isLoading = true;
 
   @override
   void initState() {
     // Create anonymous function:
         () async {
-      _isLoading = true;
       await _bodyController.getCourses();
       _isLoading = false;
-      setState(() {
-        // Update your UI with the desired changes.
-        return;
-      });
+      if(mounted){
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
     } ();
     super.initState();
   }

@@ -1,18 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/controller/bottom_nav_bar_controller/bottom_nav_bar_controller.dart';
+import 'package:music_mind_client/controller/home_controller/body_controller/body_controller.dart';
+import 'package:music_mind_client/controller/home_controller/learn_controller/learn_controller.dart';
+import 'package:music_mind_client/controller/home_controller/mind_Controller/mind_controller.dart';
+import 'package:music_mind_client/controller/home_controller/sleep_controller/sleep_controller.dart';
+import 'package:music_mind_client/controller/home_controller/work_controller/work_controller.dart';
 import 'package:music_mind_client/view/drawer/drawer.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 import 'package:music_mind_client/view/widgets/offer_card.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final MindController _mindController = Get.put(MindController());
+  final BodyController _bodyController = Get.put(BodyController());
+  final SleepController _sleepController = Get.put(SleepController());
+  final LearnController _learnController = Get.put(LearnController());
+  final WorkController _workController = Get.put(WorkController());
+
+  var _isLoading = true;
 
   @override
+  void initState(){
+        () async {
+      // print('hello there **********');
+          if (Get.find<AuthController>().user != null) {
+            await _mindController.getCourses();
+            await _bodyController.getCourses();
+            await _sleepController.getCourses();
+            await _learnController.getCourses();
+            await _workController.getCourses();
+             _isLoading = false;
+          }
+      await Future.delayed(Duration(milliseconds: 1200));
+        _isLoading = false;
+        if(mounted){
+          setState(() {
+            // Update your UI with the desired changes.
+            return;
+          });
+        }
+
+    }();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    return GetBuilder<BottomNavBarController>(
+    return _isLoading ? Scaffold(backgroundColor: KPrimaryColor,body: Center(child: CircularProgressIndicator(color: Colors.white,),),)
+        : GetBuilder<BottomNavBarController>(
       init: BottomNavBarController(),
       builder: (controller) => Scaffold(
         key: scaffoldKey,
@@ -168,7 +211,7 @@ class CurrentPlaying extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return controller.coursesData.isEmpty ? Center(child:Text('No Courses yet', style: TextStyle(color: Colors.white, fontSize: 15),)) : Align(
       alignment: Alignment.bottomCenter,
       child: Card(
         elevation: 5,

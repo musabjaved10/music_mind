@@ -13,19 +13,20 @@ class Mind extends StatefulWidget {
 
 class _MindState extends State<Mind> {
   final MindController _mindController = Get.put(MindController());
-  var _isLoading = false;
+  var _isLoading = true;
 
   @override
   void initState() {
     // Create anonymous function:
         () async {
-          _isLoading = true;
       await _mindController.getCourses();
           _isLoading = false;
-      setState(() {
-        // Update your UI with the desired changes.
-        return;
-      });
+      if(mounted){
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
     } ();
     super.initState();
   }

@@ -10,19 +10,20 @@ class Sleep extends StatefulWidget {
 
 class _SleepState extends State<Sleep> {
   final SleepController _sleepController = Get.put(SleepController());
-  var _isLoading = false;
+  var _isLoading = true;
 
   @override
   void initState() {
     // Create anonymous function:
         () async {
-      _isLoading = true;
       await _sleepController.getCourses();
       _isLoading = false;
-      setState(() {
-        // Update your UI with the desired changes.
-        return;
-      });
+      if(mounted){
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
     } ();
     super.initState();
   }

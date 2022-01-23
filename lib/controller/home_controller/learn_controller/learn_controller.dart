@@ -16,10 +16,10 @@ class LearnController extends GetxController {
 
 
   getCourses() async{
-    final url = Uri.parse('${dotenv.env['db_url']}/category/3');
+    final url = Uri.parse('${dotenv.env['db_url']}/category/9');
 
     try{
-      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}"});
+      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}", "api-key": "${dotenv.env['api_key']}"});
       final resData = jsonDecode(res.body);
       if(resData['response'] == 200){
         final courses = resData['success']['data']['category']['courses'];
@@ -38,11 +38,13 @@ class LearnController extends GetxController {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];
           // print(course['levels']);
           course['levels'].forEach((level){
-            coursesThumbnailList.add(CoursesThumbnailsModel(courseThumbnail:level['display_pic'] ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
+            coursesThumbnailList.add(CoursesThumbnailsModel(levelId: level['level_id'],
+                courseThumbnail:"${dotenv.env['db_url']}/${level['display_pic']}" ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
           });//inside foreach ends
           my_courses.add(CoursesWidgetModel(
-              courseIcon: 'assets/bxbxs-brain.png',
-              courseType: 'Mind',
+              courseId: course['course_id'],
+              courseIcon: 'assets/bibook-half.png',
+              courseType: 'Learn',
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
@@ -52,7 +54,8 @@ class LearnController extends GetxController {
         coursesData = my_courses;
         // print(coursesData);
       }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
-        Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+        _authController.signOut();
+        Get.snackbar('Error', resData['errors']['cat'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
       }
     }catch(e){
       print('whoops');

@@ -62,9 +62,7 @@ class Register extends GetWidget<AuthController> {
           const SizedBox(
             height: 30,
           ),
-          controller.isLoading.value == 'true'
-          ? Center(child: CircularProgressIndicator(color: Colors.white,),)
-          : MyButton(
+           MyButton(
             onPressed: () {
               controller.registerUser(
                   controller.emailController.text,

@@ -6,15 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/utils/root.dart';
+import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_mind_client/view/user/register.dart';
 
 class AuthController extends GetxController{
  final FirebaseAuth _auth = FirebaseAuth.instance;
  Rxn<User> _firebaseUser = Rxn<User>();
- var isLoading = 'false'.obs;
  FirebaseFirestore _firestore = FirebaseFirestore.instance;
- late TextEditingController emailController, passController, firstNameController, lastNameController;
+ late TextEditingController emailController, passController, firstNameController, lastNameController, phoneController, aboutController, displayController;
+ var userData = {};
 
 
 
@@ -27,6 +29,10 @@ class AuthController extends GetxController{
   passController = TextEditingController();
   firstNameController = TextEditingController();
   lastNameController = TextEditingController();
+  phoneController = TextEditingController();
+  aboutController = TextEditingController();
+  displayController = TextEditingController();
+
     _firebaseUser.bindStream(_auth.authStateChanges());
 
     print('printing _firebase user $_firebaseUser');
@@ -42,8 +48,6 @@ class AuthController extends GetxController{
 
   //Function to Register User
   void registerUser(String email, String password, String firstName, String lastName) async {
-     isLoading.value = 'true';
-     update();
   // print('register User function called with $email $password $firstName');
     // Getting reference for user collection
     // DocumentReference usersReference = FirebaseFirestore.instance.collection('Users').doc();
@@ -67,7 +71,8 @@ class AuthController extends GetxController{
 
     try{
       final url = Uri.parse('${dotenv.env['db_url']}/user/${usr.user!.uid}/add');
-      final res = await http.post(url, body: userDataForApi);
+      final res = await http.post(url,headers: {'api-key': '${dotenv.env['api_key']}'}, body: userDataForApi);
+      print('${dotenv.env['api_key']}');
       print('printing response from api \n ${res.body}');
       final resData = jsonDecode(res.body);
       print('**************************');
@@ -75,29 +80,25 @@ class AuthController extends GetxController{
       print(resData['response'].runtimeType);
       if(resData['response'] == 200){
         Get.back(closeOverlays: true);
-        isLoading.value = 'false';
-        update();
-        Get.offAll(() => Root());
-
-      }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
+        await Future.delayed(Duration(seconds: 2));
+        Get.offAll(() => BottomNavBar());
+      }else if((resData['response'] !=200) && (resData['errors'] != null)){
         Get.back(closeOverlays: true);
-        print('oops');
-        print(resData['errors'].keys.toList().first);
-        Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+        // print('oops');
+
+        Get.snackbar('Error',resData['errors'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
         FirebaseAuth.instance.currentUser!.delete();
       }
 
     }catch(e){
       Get.back(closeOverlays: true);
-      print('Im in catch $e');
+      print('Im in catches $e');
       FirebaseAuth.instance.currentUser!.delete();
       Get.snackbar('Error', 'Error', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
 
     }
 
    }).catchError((onError) {
-       isLoading.value = 'false';
-       update();
 
     Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
    });
@@ -106,20 +107,14 @@ class AuthController extends GetxController{
 
  //Function to Login User
   void login(String email, String password,) async {
-      isLoading.value = 'true';
-      update();
 
-  await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) {
+  await _auth.signInWithEmailAndPassword(email: email, password: password).then((value)async {
    print('signInWithEmailAndPassword with value: $value');
-      isLoading.value = 'false';
-   update();
-
-   Get.offAll(()=>Root());
+   // Get.back(closeOverlays: true);
+   Get.offAll(()=>BottomNavBar());
   }).catchError((onError) {
    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
-      isLoading.value = 'false';
-   update();
-    
+   Get.offAll(()=>Login());
   });
   }
 
@@ -129,5 +124,18 @@ class AuthController extends GetxController{
 
  getUserId(){
    return _firebaseUser.value?.uid;
+ }
+
+ getUserData() async{
+   try{
+     final userId = _firebaseUser.value?.uid;
+     final url = Uri.parse('${dotenv.env['db_url']}/user/$userId');
+     final res = await http.get(url, headers: {"api-key": "${dotenv.env['api_key']}","uid": "$userId"});
+     final Data = jsonDecode(res.body);
+     userData = Data['success']['data']['user'];
+     return;
+   }catch(e){
+     print('error in fetching one user $e');
+   }
  }
 }
