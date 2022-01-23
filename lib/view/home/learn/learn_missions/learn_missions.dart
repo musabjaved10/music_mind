@@ -3,9 +3,31 @@ import 'package:get/get.dart';
 import 'package:music_mind_client/controller/home_controller/learn_controller/learn_mission_controller/learn_mission_controller.dart';
 import 'package:music_mind_client/view/widgets/mission_widget.dart';
 
-class LearnMissions extends StatelessWidget {
+class LearnMissions extends StatefulWidget {
+  @override
+  State<LearnMissions> createState() => _LearnMissionsState();
+}
+
+class _LearnMissionsState extends State<LearnMissions> {
   final LearnMissionController _learnMissionController =
       Get.put(LearnMissionController());
+
+  var levelId = Get.arguments;
+  var _isLoading = true;
+
+  @override
+  void initState() {
+    // Create anonymous function:
+        () async {
+      await _learnMissionController.getMissions(levelId[0]);
+      _isLoading = false;
+      setState(() {
+        // Update your UI with the desired changes.
+        return;
+      });
+    } ();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +45,7 @@ class LearnMissions extends StatelessWidget {
           ),
         ),
       ),
-      body: MissionsWidget(controller: _learnMissionController),
+      body: _isLoading ? Center(child: CircularProgressIndicator(color: Colors.white,),) : MissionsWidget(controller: _learnMissionController),
     );
   }
 }

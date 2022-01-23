@@ -38,15 +38,16 @@ class BodyController extends GetxController {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];
           // print(course['levels']);
           course['levels'].forEach((level){
-            coursesThumbnailList.add(CoursesThumbnailsModel(courseThumbnail:level['display_pic'] ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
+            coursesThumbnailList.add(CoursesThumbnailsModel(levelId: level['id'] ,courseThumbnail:level['display_pic'] ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
           });//inside foreach ends
           my_courses.add(CoursesWidgetModel(
+              courseId: course['id'],
               courseIcon: 'assets/bxbxs-brain.png',
               courseType: 'Mind',
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
-              onTap: () => Get.to(() => BodyMissions()),
+              // onTap: () => Get.to(() => BodyMissions(), arguments: []),
               coursesThumbnailData: coursesThumbnailList));
         });
         coursesData = my_courses;

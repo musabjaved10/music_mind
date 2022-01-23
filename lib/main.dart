@@ -5,12 +5,15 @@ import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/bindings/auth_binding.dart';
 import 'package:music_mind_client/utils/root.dart';
 import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:music_mind_client/view/home/body/body_missions/body_missions.dart';
 import 'package:music_mind_client/view/home/mind/mind.dart';
 import 'package:music_mind_client/view/home/mind/mind_missions/mind_missions.dart';
+import 'package:music_mind_client/view/home/body/body.dart';
 import 'package:music_mind_client/view/splash_Screen/splash_screen.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:music_mind_client/view/user/register.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +49,8 @@ class MusicMindApp extends StatelessWidget {
         GetPage(name: '/bottom_nav_bar', page: ()=> BottomNavBar()),
         GetPage(name: '/mind', page: ()=> Mind()),
         GetPage(name: '/mind_missions', page: ()=> MindMissions()),
+        GetPage(name: '/body', page: ()=> Boddy()),
+        GetPage(name: '/body_missions', page: ()=> BodyMissions())
       ],
     );
   }

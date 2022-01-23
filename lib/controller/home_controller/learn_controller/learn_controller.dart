@@ -46,7 +46,7 @@ class LearnController extends GetxController {
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
-              onTap: () => Get.to(() => LearnMissions()),
+              // onTap: () => Get.to(() => LearnMissions()),
               coursesThumbnailData: coursesThumbnailList));
         });
         coursesData = my_courses;

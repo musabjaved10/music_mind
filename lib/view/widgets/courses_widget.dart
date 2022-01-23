@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/model/widgets_model/courses_widget_model.dart';
+import 'package:music_mind_client/view/home/body/body_missions/body_missions.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 
 class CoursesWidget extends StatelessWidget {
@@ -45,7 +46,9 @@ class CoursesWidget extends StatelessWidget {
                         CoursesThumbnailsModel thumbnails =
                             courseData.coursesThumbnailData![index];
                         return GestureDetector(
-                          onTap: courseData.onTap,
+                          onTap: (){
+                            Get.to(()=> BodyMissions(), arguments: [thumbnails.levelId]);
+                          },
                           child: Container(
                             margin: const EdgeInsets.only(
                                 left: 7, right: 7, bottom: 40),

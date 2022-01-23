@@ -46,7 +46,7 @@ class MindController extends GetxController {
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
-              onTap: () => Get.to(() => MindMissions()),
+              // onTap: () => Get.to(() => MindMissions()),
               coursesThumbnailData: coursesThumbnailList));
         });
         coursesData = my_courses;

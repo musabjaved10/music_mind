@@ -45,7 +45,7 @@ class SleepController extends GetxController {
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
-              onTap: () => Get.to(() => SleepMissions()),
+              // onTap: () => Get.to(() => SleepMissions()),
               coursesThumbnailData: coursesThumbnailList));
         });
         coursesData = my_courses;

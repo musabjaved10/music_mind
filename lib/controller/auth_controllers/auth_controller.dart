@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:music_mind_client/utils/root.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,12 +44,16 @@ class AuthController extends GetxController{
   void registerUser(String email, String password, String firstName, String lastName) async {
      isLoading.value = 'true';
      update();
-  print('register User function called with $email $password $firstName');
+  // print('register User function called with $email $password $firstName');
     // Getting reference for user collection
-    DocumentReference usersReference = FirebaseFirestore.instance.collection('Users').doc();
+    // DocumentReference usersReference = FirebaseFirestore.instance.collection('Users').doc();
 
-   //step-1 first create user in firebase for auth
+
+     //step-1 first create user in firebase for auth
+     Get.snackbar('Please Wait','Signing up...',
+         icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
    await _auth.createUserWithEmailAndPassword(email: email, password: password).then((usr) async {
+
      Map<String, String> userDataForApi = {
        'uid' : usr.user!.uid,
        'first_name': firstName,
@@ -71,11 +74,13 @@ class AuthController extends GetxController{
       print(resData['response']);
       print(resData['response'].runtimeType);
       if(resData['response'] == 200){
+        Get.back(closeOverlays: true);
         isLoading.value = 'false';
         update();
-        Get.offAll(() => BottomNavBar());
+        Get.offAll(() => Root());
 
       }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
+        Get.back(closeOverlays: true);
         print('oops');
         print(resData['errors'].keys.toList().first);
         Get.snackbar('Error', resData['errors'].keys.toList().first, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
@@ -83,9 +88,11 @@ class AuthController extends GetxController{
       }
 
     }catch(e){
+      Get.back(closeOverlays: true);
       print('Im in catch $e');
       FirebaseAuth.instance.currentUser!.delete();
       Get.snackbar('Error', 'Error', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+
     }
 
    }).catchError((onError) {
@@ -107,7 +114,7 @@ class AuthController extends GetxController{
       isLoading.value = 'false';
    update();
 
-   Get.offAll(()=>BottomNavBar());
+   Get.offAll(()=>Root());
   }).catchError((onError) {
    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
       isLoading.value = 'false';

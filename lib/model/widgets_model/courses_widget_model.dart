@@ -3,28 +3,30 @@
 import 'package:flutter/cupertino.dart';
 
 class CoursesWidgetModel {
-  var courseIcon, courseType, levelName,missionName, courseName;
+  var courseId, courseIcon, courseType, levelName,missionName, courseName;
   List<CoursesThumbnailsModel>? coursesThumbnailData;
-  VoidCallback? onTap;
+  // VoidCallback? onTap;
 
   CoursesWidgetModel({
+    this.courseId,
     this.courseIcon,
     this.courseType,
     this.levelName,
     this.missionName,
     this.courseName,
     this.coursesThumbnailData,
-    this.onTap,
+    // this.onTap,
   });
 }
 
 class CoursesThumbnailsModel{
-  var courseThumbnail, levelName;
+  var courseThumbnail, levelName, levelId;
   bool? levelCompleted;
 
   CoursesThumbnailsModel({
     this.courseThumbnail,
     this.levelName,
+    this.levelId,
     this.levelCompleted = false,
   });
 }

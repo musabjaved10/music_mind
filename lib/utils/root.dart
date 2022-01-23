@@ -47,10 +47,12 @@ class _RootState extends State<Root> {
       return Get.find<AuthController>().user == null
           ? Login()
           : _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                  color: Colors.white,
-                ))
+              ? Scaffold(
+                body: Center(
+                    child: CircularProgressIndicator(
+                    color: Colors.white,
+                  )),
+              )
               : BottomNavBar();
     });
   }

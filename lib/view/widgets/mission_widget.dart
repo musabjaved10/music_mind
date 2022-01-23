@@ -70,10 +70,10 @@ class MissionsWidget extends StatelessWidget {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
+                              child: Image.network(
                                 '${_missionsData.thumbnail}',
                                 fit: BoxFit.cover,
-                                width: Get.width,
+                                width: Get.width * 0.5,
                               ),
                             ),
                             Align(
@@ -105,18 +105,13 @@ class MissionsWidget extends StatelessWidget {
                       height: 15,
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Wrap(
                             spacing: 7.0,
                             children: [
-                              MyText(
-                                text: 'Mission',
-                                size: 16,
-                                weight: FontWeight.w600,
-                              ),
                               MyText(
                                 text: '${_missionsData.missionName}',
                                 size: 18,
