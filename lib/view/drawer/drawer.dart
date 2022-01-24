@@ -16,15 +16,15 @@ class _MyDrawerState extends State<MyDrawer> {
   AuthController _authController = Get.find<AuthController>();
   @override
   void initState(){
-        () async {
-      await _authController.getUserData();      
+    //     () async {
+    //   await _authController.getUserData();
       if(mounted) {
         setState(() {
-          // Update your UI with the desired changes.
+          null;
           return;
         });
       }
-    } ();
+    // } ();
     super.initState();
   }
 

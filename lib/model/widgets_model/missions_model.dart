@@ -10,14 +10,14 @@ class MissionsModel {
 }
 
 class MissionsData {
-  var thumbnail, missionName, duration, isLocked;
-  bool? isCompleted;
+  var thumbnail, missionName, duration;
+  bool? isCompleted, isLocked;
 
   MissionsData({
-    this.isLocked,
     this.thumbnail,
     this.missionName,
     this.duration,
     this.isCompleted = false,
+    this.isLocked = false
   });
 }

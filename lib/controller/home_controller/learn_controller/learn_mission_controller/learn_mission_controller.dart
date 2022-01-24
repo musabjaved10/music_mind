@@ -30,7 +30,9 @@ class LearnMissionController extends GetxController {
             thumbnail: mission['display_pic'],
             duration: mission['duration'],
             missionName: mission['name'],
-            isCompleted: mission['is_completed'] == 'true' && true,));
+            isCompleted: mission['is_completed'] == 'true' && true,
+            isLocked: mission['is_locked'] == 'true' && true
+          ));
         });
         missions.add(MissionsModel(levelName: level['name'], tagLine: 'this is a tagline', missionsData: missionsList));
         // print(missions);

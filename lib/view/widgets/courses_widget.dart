@@ -93,10 +93,16 @@ class CoursesWidget extends StatelessWidget {
                                               'assets/akar-iconscircle-check.png',
                                               height: 16,
                                             )
-                                          : Image.asset(
+                                          : thumbnails.levelLocked == true ?
+                                      Image.asset(
                                               'assets/lock.png',
                                               height: 16,
-                                            ),
+                                            )
+                                          :Image.asset(
+                                        'assets/progress-icon.png',
+                                        height: 16,
+                                      )
+                                      ,
                                     ],
                                   ),
                                 ),

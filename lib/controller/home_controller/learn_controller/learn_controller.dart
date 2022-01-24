@@ -14,14 +14,16 @@ class LearnController extends GetxController {
   List my_courses = [].obs;
   List coursesData = [].obs;
 
-
-  getCourses() async{
+  getCourses() async {
     final url = Uri.parse('${dotenv.env['db_url']}/category/9');
 
-    try{
-      final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}", "api-key": "${dotenv.env['api_key']}"});
+    try {
+      final res = await http.get(url, headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key": "${dotenv.env['api_key']}"
+      });
       final resData = jsonDecode(res.body);
-      if(resData['response'] == 200){
+      if (resData['response'] == 200) {
         final courses = resData['success']['data']['category']['courses'];
 
         // for (int i = 0; i < courses.length; i++) {
@@ -37,10 +39,15 @@ class LearnController extends GetxController {
         await courses.forEach((course) {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];
           // print(course['levels']);
-          course['levels'].forEach((level){
-            coursesThumbnailList.add(CoursesThumbnailsModel(levelId: level['level_id'],
-                courseThumbnail:"${dotenv.env['db_url']}/${level['display_pic']}" ,levelName:level['name'], levelCompleted:level['is_completed'] == 'true'? true:false ));
-          });//inside foreach ends
+          course['levels'].forEach((level) {
+            coursesThumbnailList.add(CoursesThumbnailsModel(
+                levelId: level['level_id'],
+                courseThumbnail:
+                    "${dotenv.env['db_url']}/${level['display_pic']}",
+                levelName: level['name'],
+                levelCompleted: level['is_completed'] == true && true,
+                levelLocked: level['is_locked'] == true && true));
+          }); //inside foreach ends
           my_courses.add(CoursesWidgetModel(
               courseId: course['course_id'],
               courseIcon: 'assets/bibook-half.png',
@@ -53,14 +60,15 @@ class LearnController extends GetxController {
         });
         coursesData = my_courses;
         // print(coursesData);
-      }else if((resData['response'] !=200) && (resData['errors'] != 'None')){
+      } else if ((resData['response'] != 200) &&
+          (resData['errors'] != 'None')) {
         _authController.signOut();
-        Get.snackbar('Error', resData['errors']['cat'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+        Get.snackbar('Error', resData['errors']['cat'],
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
       }
-    }catch(e){
+    } catch (e) {
       print('whoops');
       print(e);
     }
-
   }
 }

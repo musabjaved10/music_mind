@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
+import 'package:music_mind_client/controller/profile_controller/profile_controller.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text_field.dart';
 
-class Account extends GetWidget<AuthController> {
+class Account extends GetWidget<ProfileController> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,28 +40,28 @@ class Account extends GetWidget<AuthController> {
           MyTextField(
               label: 'Display Name',
               hintText: '${controller.userData['display_name']}',
-              controller: controller.displayController),
+              controller: controller.displayNameController_p),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
               label: 'First Name',
               hintText: '${controller.userData['first_name']}',
-              controller: controller.firstNameController),
+              controller: controller.firstNameController_p),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
               label: 'Last Name',
               hintText: '${controller.userData['last_name']}',
-              controller: controller.lastNameController),
+              controller: controller.lastNameController_p),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
             label: 'Email',
             hintText: '${controller.userData['email']}',
-            controller: controller.emailController,
+            controller: controller.emailController_p,
           ),
           const SizedBox(
             height: 25,
@@ -67,16 +69,15 @@ class Account extends GetWidget<AuthController> {
           MyTextField(
               label: 'Phone',
               hintText: '${controller.userData['phone'] ?? 'Add your phone'}',
-              controller: controller.phoneController),
+              controller: controller.phoneController_p),
           const SizedBox(
             height: 25,
           ),
           MyTextField(
               maxlines: 10,
               label: 'About',
-              hintText:
-                  '${controller.userData['about'] ?? 'Introduce yourself...'}',
-              controller: controller.aboutController),
+              hintText:'${controller.userData['about'] ?? 'Introduce yourself...'}',
+              controller: controller.aboutController_p),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -90,7 +91,10 @@ class Account extends GetWidget<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               MyButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final res = await controller.updateProfile();
+                  res == 200 ? Get.to(() => Account()): '';
+                },
                 text: 'Save',
                 btnBgColor: KSecondaryColor,
               ),

@@ -9,13 +9,12 @@ import 'package:music_mind_client/utils/root.dart';
 import 'package:music_mind_client/view/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:music_mind_client/view/user/login.dart';
 import 'package:http/http.dart' as http;
-import 'package:music_mind_client/view/user/register.dart';
 
 class AuthController extends GetxController{
  final FirebaseAuth _auth = FirebaseAuth.instance;
  Rxn<User> _firebaseUser = Rxn<User>();
- FirebaseFirestore _firestore = FirebaseFirestore.instance;
- late TextEditingController emailController, passController, firstNameController, lastNameController, phoneController, aboutController, displayController;
+ // FirebaseFirestore _firestore = FirebaseFirestore.instance;
+ late TextEditingController emailController, passController, firstNameController, lastNameController;
  var userData = {};
 
 
@@ -25,18 +24,16 @@ class AuthController extends GetxController{
 
  @override
  void onInit() {
+   if(_auth.currentUser != null){
+      getUserData();
+   }
   emailController = TextEditingController();
   passController = TextEditingController();
   firstNameController = TextEditingController();
   lastNameController = TextEditingController();
-  phoneController = TextEditingController();
-  aboutController = TextEditingController();
-  displayController = TextEditingController();
 
     _firebaseUser.bindStream(_auth.authStateChanges());
-
-    print('printing _firebase user $_firebaseUser');
-    print(" Auth Change :   ${_auth.currentUser}");
+    print(" Auth Changed");
   }
  @override
  void onClose() {
@@ -107,7 +104,8 @@ class AuthController extends GetxController{
 
  //Function to Login User
   void login(String email, String password,) async {
-
+    Get.snackbar('Please Wait','Logging In',
+        icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
   await _auth.signInWithEmailAndPassword(email: email, password: password).then((value)async {
    print('signInWithEmailAndPassword with value: $value');
    // Get.back(closeOverlays: true);
@@ -123,12 +121,12 @@ class AuthController extends GetxController{
  }
 
  getUserId(){
-   return _firebaseUser.value?.uid;
+   return _auth.currentUser?.uid;
  }
 
  getUserData() async{
    try{
-     final userId = _firebaseUser.value?.uid;
+     final userId = _auth.currentUser?.uid;
      final url = Uri.parse('${dotenv.env['db_url']}/user/$userId');
      final res = await http.get(url, headers: {"api-key": "${dotenv.env['api_key']}","uid": "$userId"});
      final Data = jsonDecode(res.body);

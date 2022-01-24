@@ -5,6 +5,7 @@ import 'package:music_mind_client/controller/home_controller/learn_controller/le
 import 'package:music_mind_client/controller/home_controller/mind_Controller/mind_controller.dart';
 import 'package:music_mind_client/controller/home_controller/sleep_controller/sleep_controller.dart';
 import 'package:music_mind_client/controller/home_controller/work_controller/work_controller.dart';
+import 'package:music_mind_client/controller/profile_controller/profile_controller.dart';
 import 'package:music_mind_client/view/home/body/body.dart';
 import 'package:music_mind_client/view/home/learn/learn.dart';
 import 'package:music_mind_client/view/home/mind/mind.dart';
@@ -17,6 +18,7 @@ class BottomNavBarController extends GetxController {
   final SleepController _sleepController = Get.put(SleepController());
   final LearnController _learnController = Get.put(LearnController());
   final WorkController _workController = Get.put(WorkController());
+  ProfileController _profileController = Get.put(ProfileController());
 
   int currentIndex = 0;
   var currentCategory;

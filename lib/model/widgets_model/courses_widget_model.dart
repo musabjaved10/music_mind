@@ -21,12 +21,13 @@ class CoursesWidgetModel {
 
 class CoursesThumbnailsModel{
   var courseThumbnail, levelName, levelId;
-  bool? levelCompleted;
+  bool? levelCompleted, levelLocked;
 
   CoursesThumbnailsModel({
     this.courseThumbnail,
     this.levelName,
     this.levelId,
     this.levelCompleted = false,
+    this.levelLocked = true
   });
 }
