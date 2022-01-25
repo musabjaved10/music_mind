@@ -18,6 +18,8 @@ dependencies:
   firebase_core: ^1.11.0
   http: ^0.13.4
   flutter_dotenv: ^5.0.2
+  video_player: ^2.2.15
+  chewie: ^1.2.2
 
 dev_dependencies:
   flutter_test:

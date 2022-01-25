@@ -45,7 +45,7 @@ class MindController extends GetxController {
             coursesThumbnailList.add(CoursesThumbnailsModel(
                 levelId: level['level_id'],
                 courseThumbnail:
-                    "${dotenv.env['db_url']}/${level['display_pic']}",
+                    "${dotenv.env['db_url']}${level['display_pic']}",
                 levelName: level['name'],
                 levelCompleted:
                     level['is_completed'] == true && true ,

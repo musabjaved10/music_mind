@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/model/widgets_model/missions_model.dart';
+import 'package:music_mind_client/view/mission_window.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 
 class MissionsWidget extends StatelessWidget {
@@ -65,57 +66,49 @@ class MissionsWidget extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 8,
-                            child: Card(
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              margin: EdgeInsets.zero,
-                              color: KPrimaryColor,
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      '${_missionsData.thumbnail}',
-                                      fit: BoxFit.cover,
-                                      width: Get.width * 0.5,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 8, 8),
-                                      child: MyText(
-                                        text: '${_missionsData.duration}',
-                                        size: 12,
-                                        color: _missionsData.isCompleted == true
-                                            ? KSecondaryColor
-                                            : KGrey2Color,
+                            child: GestureDetector(
+                              onTap: (){Get.to(()=> MissionWindow(), arguments: [_missionsData.missionId]);},
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                margin: EdgeInsets.zero,
+                                color: KPrimaryColor,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        '${_missionsData.thumbnail}',
+                                        fit: BoxFit.cover,
+                                        width: Get.width * 0.5,
                                       ),
                                     ),
-                                  ),
-                                  _missionsData.isCompleted == true
-                                      ? Center(
-                                          child: Image.asset(
-                                            'assets/biplay-fill.png',
-                                            height: 30,
-                                          ),
-                                        )
-                                      : _missionsData.isLocked == true
-                                          ? Center(
-                                              child: Image.asset(
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                                        child: MyText(
+                                          text: '${_missionsData.duration}',
+                                          size: 12,
+                                          color: _missionsData.isCompleted == true
+                                              ? KSecondaryColor
+                                              : KGrey2Color,
+                                        ),
+                                      ),
+                                    ),
+                                    _missionsData.isCompleted == true
+                                        ? Center(
+                                            child: Image.asset(
                                               'assets/biplay-fill.png',
                                               height: 30,
-                                            ))
-                                          : Center(
-                                              child: Image.asset(
-                                                'assets/biplay-fill.png',
-                                                height: 30,
-                                              ),
-                                            )
-                                ],
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -142,10 +135,15 @@ class MissionsWidget extends StatelessWidget {
                                         'assets/akar-iconscircle-check.png',
                                         height: 16,
                                       )
-                                    : Image.asset(
-                                        'assets/lock.png',
-                                        height: 16,
-                                      ),
+                                    : _missionsData.isLocked == true
+                                        ? Image.asset(
+                                            'assets/lock.png',
+                                            height: 16,
+                                          )
+                                        : Image.asset(
+                                            'assets/progress-icon.png',
+                                            height: 16,
+                                          ),
                               ],
                             ),
                           ),

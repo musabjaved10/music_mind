@@ -27,11 +27,11 @@ class LearnMissionController extends GetxController {
         await level_missions.forEach((mission) {
           // print(course['levels']);
           missionsList.add(MissionsData(
-            thumbnail: mission['display_pic'],
+            thumbnail: "${dotenv.env['db_url']}${mission['display_pic']}",
             duration: mission['duration'],
             missionName: mission['name'],
-            isCompleted: mission['is_completed'] == 'true' && true,
-            isLocked: mission['is_locked'] == 'true' && true
+            isCompleted: mission['is_completed'] == true && true,
+            isLocked: mission['is_locked'] == true && true
           ));
         });
         missions.add(MissionsModel(levelName: level['name'], tagLine: 'this is a tagline', missionsData: missionsList));

@@ -77,7 +77,8 @@ class AuthController extends GetxController{
       print(resData['response'].runtimeType);
       if(resData['response'] == 200){
         Get.back(closeOverlays: true);
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(Duration(milliseconds: 300));
+        await getUserData();
         Get.offAll(() => BottomNavBar());
       }else if((resData['response'] !=200) && (resData['errors'] != null)){
         Get.back(closeOverlays: true);
@@ -109,6 +110,7 @@ class AuthController extends GetxController{
   await _auth.signInWithEmailAndPassword(email: email, password: password).then((value)async {
    print('signInWithEmailAndPassword with value: $value');
    // Get.back(closeOverlays: true);
+   await getUserData();
    Get.offAll(()=>BottomNavBar());
   }).catchError((onError) {
    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
@@ -134,6 +136,35 @@ class AuthController extends GetxController{
      return;
    }catch(e){
      print('error in fetching one user $e');
+   }
+ }
+
+ Future playMission(missionId) async{
+   try{
+     var mission = {};
+     final user_id = _auth.currentUser?.uid;
+     final url = Uri.parse('${dotenv.env['db_url']}/mission/$missionId');
+     final res = await http.get(url, headers: {"uid": "${user_id}", "api-key": "${dotenv.env['api_key']}"});
+     final resData = jsonDecode(res.body);
+     if(resData['response'] == 200 &&  resData['success']['data']['mission']['video'] != null) {
+        mission = {...resData['success']['data']['mission']};
+        return mission;
+     }else if((resData['response'] !=200) && (resData['errors'] != null)){
+       Get.back();
+       Get.snackbar('Error', resData['errors'].values.toList().first,
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey, duration: const Duration(milliseconds: 900));
+       return null;
+     }
+     else{
+       Get.back();
+       Get.snackbar('Error', 'Video could not be played or does not exist.',
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+       return null;
+     }
+   }catch(e){
+     Get.back();
+     Get.snackbar('Error', 'Something went wrong', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+     print('error in playing mission $e');
    }
  }
 }
