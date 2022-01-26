@@ -24,7 +24,6 @@ class BodyController extends GetxController {
         "api-key": "${dotenv.env['api_key']}"
       });
       final resData = jsonDecode(res.body);
-      print('printing response for body $resData');
       if (resData['response'] == 200) {
         final courses = resData['success']['data']['category']['courses'];
 
@@ -63,10 +62,10 @@ class BodyController extends GetxController {
         coursesData = my_courses;
         // print(coursesData);
       } else if ((resData['response'] != 200) &&
-          (resData['errors'] != 'None')) {
+          (resData['errors'] != null)) {
         _authController.signOut();
         Get.snackbar('Error', resData['errors']['cat'],
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       }
     } catch (e) {
       print('whoops');

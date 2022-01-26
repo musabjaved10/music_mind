@@ -82,20 +82,20 @@ class ProfileController extends GetxController {
       if (resData['response'] == 200) {
         await getProfileData();
         await _authController.getUserData();
-        Get.snackbar('Success','Your records has been updated.',snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+        Get.snackbar('Success','Your records has been updated.',snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
         return 200;
       }
       else if(resData['errors'] !=null){
-        Get.snackbar('Error',resData['errors'].values.toList().first,snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+        Get.snackbar('Error',resData['errors'].values.toList().first,snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
         return null;
       }
       else if(resData['warnings'] !=null){
-        Get.snackbar('Warning',resData['warnings'].values.toList().first,snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+        Get.snackbar('Warning',resData['warnings'].values.toList().first,snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
         return null;
 
       }
     } catch(e){
-      Get.snackbar('Error','Update failed',snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+      Get.snackbar('Error','Update failed',snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       print(e);
       return null;
 

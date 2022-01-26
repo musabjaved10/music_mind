@@ -1,28 +1,105 @@
+import 'dart:convert';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/model/profile_model/subscriptions_price/subscriptions_price_model.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SubscriptionsPriceController extends GetxController {
+  final AuthController _authController = Get.find<AuthController>();
   List<SubscriptionsPriceModel> plansData = [
-    SubscriptionsPriceModel(
-      planName: 'The Shallow End',
-      planTagLine: 'Give it a shot!',
-      price: '0.99',
-      duration: 'week',
-    ),
-    SubscriptionsPriceModel(
-      planName: 'The Deep End',
-      planTagLine: 'Make the practice routine',
-      price: '2.49',
-      duration: 'month',
-      haveBestValue: true,
-    ),
-    SubscriptionsPriceModel(
-      planName: 'Out to Sea',
-      planTagLine: 'Discover the Depsths of You',
-      price: '25.99',
-      duration: 'year',
-    ),
+    // SubscriptionsPriceModel(
+    //   planName: 'The Shallow End',
+    //   planTagLine: 'Give it a shot!',
+    //   price: '0.99',
+    //   duration: 'week',
+    // ),
+    // SubscriptionsPriceModel(
+    //   planName: 'The Deep End',
+    //   planTagLine: 'Make the practice routine',
+    //   price: '2.49',
+    //   duration: 'month',
+    //   haveBestValue: true,
+    // ),
+    // SubscriptionsPriceModel(
+    //   planName: 'Out to Sea',
+    //   planTagLine: 'Discover the Depsths of You',
+    //   price: '25.99',
+    //   duration: 'year',
+    // ),
   ];
 
-  List<SubscriptionsPriceModel> get getPlansData => plansData;
+  // List<SubscriptionsPriceModel> get getPlansData => plansData;
+  Future<void> getPlans () async{
+    List<SubscriptionsPriceModel> my_plans = [];
+    final url = Uri.parse('${dotenv.env['db_url']}/subscriptions');
+    try{
+      final res = await http.get(url, headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key" : "${dotenv.env['api_key']}"
+      });
+      final resData = jsonDecode(res.body);
+      if(resData['response'] == 200){
+        final subs = resData['success']['data']['subscriptions'];
+        if (subs.isEmpty) return;
+        await subs.forEach((sub){
+          my_plans.add(SubscriptionsPriceModel(
+            subs_id: sub['subs_id'],
+            planName: sub['title'],
+            planTagLine: sub['subtitle'],
+            price: sub['price'],
+            duration: sub['freq'],
+            haveBestValue: sub['is_best'] == true && true
+          ));
+        });
+        plansData = my_plans;
+
+      }else if ((resData['response'] != 200) &&
+          (resData['errors'] != null)){
+        print(resData['errors'].runtimeType);
+        Get.back();
+        Get.snackbar('Error', resData['errors'].values.toList().first,
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      }
+
+    }catch(e){
+      Get.back();
+      Get.snackbar('Error', 'Something went wrong. Try later',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      print('printing error for subscriptions $e');
+    }
+  }
+
+  Future getSubById (id) async{
+    List<SubscriptionsPriceModel> my_plans = [];
+    final url = Uri.parse('${dotenv.env['db_url']}/subscription/$id');
+    try{
+      final res = await http.get(url, headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key" : "${dotenv.env['api_key']}"
+      });
+      final resData = jsonDecode(res.body);
+      if(resData['response'] == 200){
+        final sub = resData['success']['data']['subscription'];
+        if (sub.isEmpty) return;
+        return sub;
+
+      }else if ((resData['response'] != 200) &&
+          (resData['errors'] != null)){
+        print(resData['errors'].runtimeType);
+        Get.back();
+        Get.snackbar('Error', resData['errors'].values.toList().first,
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      }
+
+    }catch(e){
+      Get.back();
+      Get.snackbar('Error', 'Something went wrong. Try later',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      print('printing error for subscriptions $e');
+    }
+  }
+
 }

@@ -52,7 +52,7 @@ class AuthController extends GetxController{
 
      //step-1 first create user in firebase for auth
      Get.snackbar('Please Wait','Signing up...',
-         icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+         icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    await _auth.createUserWithEmailAndPassword(email: email, password: password).then((usr) async {
 
      Map<String, String> userDataForApi = {
@@ -84,7 +84,7 @@ class AuthController extends GetxController{
         Get.back(closeOverlays: true);
         // print('oops');
 
-        Get.snackbar('Error',resData['errors'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+        Get.snackbar('Error',resData['errors'], snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white );
         FirebaseAuth.instance.currentUser!.delete();
       }
 
@@ -92,13 +92,13 @@ class AuthController extends GetxController{
       Get.back(closeOverlays: true);
       print('Im in catches $e');
       FirebaseAuth.instance.currentUser!.delete();
-      Get.snackbar('Error', 'Error', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+      Get.snackbar('Error', 'Error', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white );
 
     }
 
    }).catchError((onError) {
 
-    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey );
+    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white );
    });
 
   }
@@ -106,19 +106,20 @@ class AuthController extends GetxController{
  //Function to Login User
   void login(String email, String password,) async {
     Get.snackbar('Please Wait','Logging In',
-        icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+        icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
   await _auth.signInWithEmailAndPassword(email: email, password: password).then((value)async {
    print('signInWithEmailAndPassword with value: $value');
    // Get.back(closeOverlays: true);
    await getUserData();
    Get.offAll(()=>BottomNavBar());
   }).catchError((onError) {
-   Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+   Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    Get.offAll(()=>Login());
   });
   }
 
  void signOut() async{
+   Get.snackbar('Goodbye', 'See you again', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    await _auth.signOut().then((value) => Get.offAll(()=> Login()));
  }
 
@@ -152,18 +153,18 @@ class AuthController extends GetxController{
      }else if((resData['response'] !=200) && (resData['errors'] != null)){
        Get.back();
        Get.snackbar('Error', resData['errors'].values.toList().first,
-           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey, duration: const Duration(milliseconds: 900));
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white, duration: const Duration(milliseconds: 900));
        return null;
      }
      else{
        Get.back();
        Get.snackbar('Error', 'Video could not be played or does not exist.',
-           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
        return null;
      }
    }catch(e){
      Get.back();
-     Get.snackbar('Error', 'Something went wrong', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+     Get.snackbar('Error', 'Something went wrong', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
      print('error in playing mission $e');
    }
  }

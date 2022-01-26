@@ -15,6 +15,24 @@ class SubscriptionsPricing extends StatefulWidget {
 class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
   bool? selected = false, bestValue = false;
   var textColor = KPrimaryColor;
+  var _isLoading = true;
+  final SubscriptionsPriceController controller = Get.put(SubscriptionsPriceController());
+
+  @override
+  void initState() {
+    // Create anonymous function:
+        () async {
+      await controller.getPlans();
+      _isLoading = false;
+      if(mounted){
+        setState(() {
+          // Update your UI with the desired changes.
+          return;
+        });
+      }
+    } ();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +40,11 @@ class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
       appBar: CustomAppBar(
         title: 'Pricing',
       ),
-      body: ListView(
+      body: _isLoading ?
+      const Center(child: CircularProgressIndicator(color: Colors.white,),) :
+      controller.plansData.isEmpty ?
+      const Center(child: Text('No plans found', style: TextStyle(color: Colors.white)), ) :
+      ListView(
         shrinkWrap: true,
         physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -42,19 +64,18 @@ class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
           const SizedBox(
             height: 30,
           ),
-          GetBuilder<SubscriptionsPriceController>(
-            init: SubscriptionsPriceController(),
-            builder: (controller) => SizedBox(
+           SizedBox(
               height: 230,
               child: ListView.builder(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
-                  itemCount: controller.getPlansData.length,
+                  itemCount: controller.plansData.length,
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 7),
                   itemBuilder: (context, index) {
-                    var plansData = controller.getPlansData[index];
+                    var plansData = controller.plansData[index];
                     return Plans(
+                      id: '${plansData.subs_id}',
                       planName: '${plansData.planName}',
                       planTagLine: '${plansData.planTagLine}',
                       price: '${plansData.price}',
@@ -63,7 +84,7 @@ class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
                     );
                   }),
             ),
-          ),
+
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -77,7 +98,8 @@ class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               MyButton(
-                onPressed: () => Get.to(() => OrderSummary()),
+                onPressed: () => Get.snackbar('Plan missing', 'Please select the plan',
+                    snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white),
                 text: 'Continue',
                 btnBgColor: KSecondaryColor,
               ),
@@ -90,10 +112,11 @@ class _SubscriptionsPricingState extends State<SubscriptionsPricing> {
 }
 
 class Plans extends StatefulWidget {
-  var planName, planTagLine, price, duration;
+  var planName, planTagLine, price, duration, id;
   bool? haveBestValue;
 
   Plans({
+    this.id,
     this.planName,
     this.planTagLine,
     this.price,
@@ -109,93 +132,96 @@ class _PlansState extends State<Plans> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       children: [
-        Card(
-          color: widget.haveBestValue == true ? KGreenColor : KSecondaryColor,
-          margin: const EdgeInsets.only(left: 7, right: 7, top: 20),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            width: 140,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    MyText(
-                      text: '${widget.planName}',
-                      size: 14,
-                      color: widget.haveBestValue == true
-                          ? KSecondaryColor
-                          : KPrimaryColor,
-                      weight: FontWeight.w700,
-                    ),
-                    MyText(
-                      text: '${widget.planTagLine}',
-                      size: 8,
-                      color: widget.haveBestValue == true
-                          ? KSecondaryColor
-                          : KPrimaryColor,
-                    ),
-                  ],
-                ),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontFamily: 'Noto Sans',
-                      color: widget.haveBestValue == true
-                          ? KSecondaryColor
-                          : KPrimaryColor,
-                    ),
+        GestureDetector(
+          onTap: () => Get.to(() => OrderSummary(), arguments: [widget.id]),
+          child: Card(
+            color: widget.haveBestValue == true ? KGreenColor : KSecondaryColor,
+            margin: const EdgeInsets.only(left: 7, right: 7, top: 20),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              width: 140,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
                     children: [
-                      const TextSpan(
-                        text: '\$',
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
+                      MyText(
+                        text: '${widget.planName}',
+                        size: 14,
+                        color: widget.haveBestValue == true
+                            ? KSecondaryColor
+                            : KPrimaryColor,
+                        weight: FontWeight.w700,
                       ),
-                      TextSpan(
-                        text: '${widget.price}',
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '${widget.duration}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
+                      MyText(
+                        text: '${widget.planTagLine}',
+                        size: 8,
+                        color: widget.haveBestValue == true
+                            ? KSecondaryColor
+                            : KPrimaryColor,
                       ),
                     ],
                   ),
-                ),
-                MyText(
-                  text: '7 days free trial',
-                  size: 8,
-                  color: widget.haveBestValue == true
-                      ? KSecondaryColor
-                      : KPrimaryColor,
-                ),
-                widget.haveBestValue == true
-                    ? Image.asset(
-                        'assets/akar-iconscircle-check.png',
-                        height: 25,
-                        color: KSecondaryColor,
-                      )
-                    : const CircleAvatar(
-                        radius: 12.0,
-                        backgroundColor: KGreyColor,
-                        child: Icon(
-                          Icons.check,
-                          color: KSecondaryColor,
-                          size: 15,
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: 'Noto Sans',
+                        color: widget.haveBestValue == true
+                            ? KSecondaryColor
+                            : KPrimaryColor,
+                      ),
+                      children: [
+                        const TextSpan(
+                          text: '\$',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
-                      )
-              ],
+                        TextSpan(
+                          text: '${widget.price}',
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '${widget.duration}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // MyText(
+                  //   text: '7 days free trial',
+                  //   size: 8,
+                  //   color: widget.haveBestValue == true
+                  //       ? KSecondaryColor
+                  //       : KPrimaryColor,
+                  // ),
+                  widget.haveBestValue == true
+                      ? Image.asset(
+                          'assets/akar-iconscircle-check.png',
+                          height: 25,
+                          color: KSecondaryColor,
+                        )
+                      : const CircleAvatar(
+                          radius: 12.0,
+                          backgroundColor: KGreyColor,
+                          child: Icon(
+                            Icons.check,
+                            color: KSecondaryColor,
+                            size: 15,
+                          ),
+                        )
+                ],
+              ),
             ),
           ),
         ),

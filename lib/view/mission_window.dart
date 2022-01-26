@@ -17,7 +17,7 @@ class _MissionWindowState extends State<MissionWindow> {
   final AuthController _authController = Get.find<AuthController>();
   late VideoController controller;
   var missionId = Get.arguments;
-  var mission = {};
+  var mission;
   var _isLoading = true;
 
   @override
@@ -26,6 +26,7 @@ class _MissionWindowState extends State<MissionWindow> {
         () async {
           controller = Get.put(VideoController());
       mission = await _authController.playMission(missionId[0]);
+      if (mission == null) return;
       final url = '${dotenv.env['db_url']}${mission['video']['video_url']}';
       await controller.initializePlayer(url);
       _isLoading = false;

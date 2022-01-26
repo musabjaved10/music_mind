@@ -47,8 +47,9 @@ class WorkMissionController extends GetxController {
         // print(level_missions);
 
       } else if ((resData['response'] != 200) && (resData['errors'] != null)) {
+        Get.back();
         Get.snackbar('Error', resData['errors'].keys.toList().first,
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       }
     } catch (e) {
       print('whoops');

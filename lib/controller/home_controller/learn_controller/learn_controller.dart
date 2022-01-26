@@ -64,7 +64,7 @@ class LearnController extends GetxController {
           (resData['errors'] != 'None')) {
         _authController.signOut();
         Get.snackbar('Error', resData['errors']['cat'],
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       }
     } catch (e) {
       print('whoops');
