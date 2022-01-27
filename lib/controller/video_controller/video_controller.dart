@@ -20,8 +20,7 @@ class VideoController extends GetxController{
   }
 
   Future<void> initializePlayer(url) async{
-    print('printing url*****');
-    videoPlayerController = VideoPlayerController.network(url);
+    videoPlayerController = VideoPlayerController.network('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4');
     await Future.wait([videoPlayerController.initialize()]);
     chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
@@ -29,6 +28,7 @@ class VideoController extends GetxController{
         materialProgressColors: ChewieProgressColors(
           handleColor: Colors.yellowAccent,
           playedColor: Colors.red,
+          backgroundColor: KPrimaryColor
         ),
         autoInitialize: true
     );
