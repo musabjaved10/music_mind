@@ -15,7 +15,7 @@ class WorkController extends GetxController {
   getCourses() async {
     List my_courses = [].obs;
 
-    final url = Uri.parse('${dotenv.env['db_url']}/category/10');
+    final url = Uri.parse('${dotenv.env['db_url']}/category/5');
 
     try {
       final res = await http.get(url, headers: {

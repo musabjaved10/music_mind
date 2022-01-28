@@ -52,7 +52,7 @@ class AuthController extends GetxController{
 
      //step-1 first create user in firebase for auth
      Get.snackbar('Please Wait','Signing up...',
-         icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+         icon: Icon(Icons.person_add, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white, duration: Duration(seconds: 4));
    await _auth.createUserWithEmailAndPassword(email: email, password: password).then((usr) async {
 
      Map<String, String> userDataForApi = {
@@ -69,8 +69,6 @@ class AuthController extends GetxController{
     try{
       final url = Uri.parse('${dotenv.env['db_url']}/user/${usr.user!.uid}/add');
       final res = await http.post(url,headers: {'api-key': '${dotenv.env['api_key']}'}, body: userDataForApi);
-      print('${dotenv.env['api_key']}');
-      print('printing response from api \n ${res.body}');
       final resData = jsonDecode(res.body);
       print('**************************');
       print(resData['response']);
@@ -147,7 +145,8 @@ class AuthController extends GetxController{
      final url = Uri.parse('${dotenv.env['db_url']}/mission/$missionId');
      final res = await http.get(url, headers: {"uid": "${user_id}", "api-key": "${dotenv.env['api_key']}"});
      final resData = jsonDecode(res.body);
-     if(resData['response'] == 200 &&  resData['success']['data']['mission']['video'] != null) {
+     print(resData);
+     if(resData['response'] == 200 ) {
         mission = {...resData['success']['data']['mission']};
         return mission;
      }else if((resData['response'] !=200) && (resData['errors'] != null)){

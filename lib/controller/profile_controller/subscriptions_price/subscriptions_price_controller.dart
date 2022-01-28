@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
@@ -73,7 +73,7 @@ class SubscriptionsPriceController extends GetxController {
   }
 
   Future getSubById (id) async{
-    List<SubscriptionsPriceModel> my_plans = [];
+    print('printing sub id $id');
     final url = Uri.parse('${dotenv.env['db_url']}/subscription/$id');
     try{
       final res = await http.get(url, headers: {
@@ -82,7 +82,7 @@ class SubscriptionsPriceController extends GetxController {
       });
       final resData = jsonDecode(res.body);
       if(resData['response'] == 200){
-        final sub = resData['success']['data']['subscription'];
+        final sub = resData['success']['data'];
         if (sub.isEmpty) return;
         return sub;
 
@@ -99,6 +99,62 @@ class SubscriptionsPriceController extends GetxController {
       Get.snackbar('Error', 'Something went wrong. Try later',
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       print('printing error for subscriptions $e');
+    }
+  }
+  Future activateTrial (id) async{
+    final url = Uri.parse('${dotenv.env['db_url']}/subscription/$id');
+    try{
+      final res = await http.post(url, headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key" : "${dotenv.env['api_key']}"
+      });
+      final resData = jsonDecode(res.body);
+      print(resData);
+      if(resData['response'] == 200){
+        return 200;
+
+      }else if ((resData['response'] != 200) &&
+          (resData['errors'] != null)){
+        return 404;
+      }
+
+    }catch(e){
+      print('printing error for subscriptions $e');
+      return 404;
+    }
+  }
+
+  Future makePayment (subId) async{
+    try{
+      final url = Uri.parse('${dotenv.env['db_url']}/subscription/$subId/payment-info');
+      final res = await http.get(url, headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key" : "${dotenv.env['api_key']}"
+      });
+
+      final resData =  jsonDecode(res.body);
+      print(resData);
+      if(resData['response'] == 200) {
+        final paymentIntentData = resData['success']['data']['payment_sheet'];
+        await Stripe.instance.initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+                applePay: false,
+                googlePay: false,
+                paymentIntentClientSecret: paymentIntentData['paymentIntent'],
+                customerId: paymentIntentData['customer'],
+                customerEphemeralKeySecret: paymentIntentData['ephemeralKey'],
+                merchantDisplayName: 'Test merchant',
+            )
+        );
+        await Stripe.instance.presentPaymentSheet();
+      }else if ((resData['response'] != 200) &&
+          (resData['errors'] != null)){
+        Get.back();
+        Get.snackbar('Error', resData['errors'].keys.toList().first,
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      }
+    }catch(e){
+      print('printing error for payments $e');
     }
   }
 

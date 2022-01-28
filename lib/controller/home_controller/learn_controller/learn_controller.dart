@@ -15,7 +15,7 @@ class LearnController extends GetxController {
   List coursesData = [].obs;
 
   getCourses() async {
-    final url = Uri.parse('${dotenv.env['db_url']}/category/9');
+    final url = Uri.parse('${dotenv.env['db_url']}/category/4');
 
     try {
       final res = await http.get(url, headers: {

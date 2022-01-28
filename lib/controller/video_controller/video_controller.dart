@@ -20,7 +20,7 @@ class VideoController extends GetxController{
   }
 
   Future<void> initializePlayer(url) async{
-    videoPlayerController = VideoPlayerController.network('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4');
+    final VideoPlayerController videoPlayerController = VideoPlayerController.network('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4');
     await Future.wait([videoPlayerController.initialize()]);
     chewieController = ChewieController(
         videoPlayerController: videoPlayerController,

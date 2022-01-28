@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/bindings/auth_binding.dart';
@@ -19,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
+  Stripe.publishableKey = 'pk_test_neFiWZmP73t6MxcbqrATir3y00YX32CRnz';
   runApp(MusicMindApp());
 }
 

@@ -16,7 +16,7 @@ class MindController extends GetxController {
   getCourses() async {
     List my_courses = [].obs;
 
-    final url = Uri.parse('${dotenv.env['db_url']}/category/6');
+    final url = Uri.parse('${dotenv.env['db_url']}/category/1');
 
     try {
       final res = await http.get(url, headers: {

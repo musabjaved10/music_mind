@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/profile_controller/subscriptions_price/subscriptions_price_controller.dart';
@@ -6,7 +7,7 @@ import 'package:music_mind_client/view/profile/payment.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
-import 'package:music_mind_client/view/widgets/my_text_field.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class OrderSummary extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _OrderSummaryState extends State<OrderSummary> {
     // Create anonymous function:
         () async {
       sub = await controller.getSubById(id[0]);
+      print(sub);
       _isLoading = false;
       if(mounted){
         setState(() {
@@ -36,6 +38,9 @@ class _OrderSummaryState extends State<OrderSummary> {
   }
   @override
   Widget build(BuildContext context) {
+    final trial_dialog = ProgressDialog(context: context,);
+    final payment_dialog = ProgressDialog(context: context);
+
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Order Summary',
@@ -61,7 +66,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               weight: FontWeight.w500,
             ),
             trailing: MyText(
-              text: '${sub['title']}',
+              text: '${sub['subscription']['title']}',
               size: 14,
               color: KGrey2Color,
             ),
@@ -111,7 +116,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               weight: FontWeight.w500,
             ),
             trailing: MyText(
-              text: '${sub['currency']['symbol']}${sub['price']}',
+              text: '${sub['subscription']['currency']['symbol']}${sub['subscription']['price']}',
               size: 14,
               color: KGrey2Color,
             ),
@@ -124,7 +129,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               weight: FontWeight.w500,
             ),
             trailing: MyText(
-              text: '${sub['currency']['symbol']}${sub['sales_tax_price']}',
+              text: '${sub['subscription']['currency']['symbol']}${sub['subscription']['sales_tax_price']}',
               size: 14,
               color: KGrey2Color,
             ),
@@ -153,7 +158,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               weight: FontWeight.w700,
             ),
             trailing: MyText(
-              text: '${sub['currency']['symbol']}${sub['total_price']}',
+              text: '${sub['subscription']['currency']['symbol']}${sub['subscription']['total_price']}',
               size: 18,
               weight: FontWeight.w700,
               color: KSecondaryColor,
@@ -161,7 +166,7 @@ class _OrderSummaryState extends State<OrderSummary> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: _isLoading == false ? BottomAppBar(
         elevation: 0,
         color: KPrimaryColor,
         child: Container(
@@ -171,15 +176,39 @@ class _OrderSummaryState extends State<OrderSummary> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              MyButton(
-                onPressed: () => Get.to(() => Payment()),
-                text: 'Pay',
+               sub['trial'] == null ? MyButton(
+                onPressed: () async{
+                  trial_dialog.show(
+                    max: 1,
+                    msg: 'Activating free trial',
+                    progressBgColor: Colors.transparent,
+                  );
+                  final tRes = await controller.activateTrial(id[0]);
+                  if(tRes == 200){
+                    trial_dialog.close();
+                    Get.back();
+                    Get.snackbar('Trial activated Successfully', 'Enjoy your free trial',
+                        snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+                  }else{
+                    trial_dialog.close();
+                    Get.snackbar('Error', 'Unable to activate your trial',
+                        snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+                  }
+                },
+                text: 'Activate Free Trial',
+                btnBgColor: KSecondaryColor,
+              ): MyButton(
+                onPressed: () async{
+                  final pay_res = await controller.makePayment(id[0]);
+                  print('printing apying resssssss $pay_res');
+                },
+                text: 'Pay now',
                 btnBgColor: KSecondaryColor,
               ),
             ],
           ),
         ),
-      ),
+      ): null,
     );
   }
 }

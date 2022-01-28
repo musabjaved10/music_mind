@@ -26,8 +26,16 @@ class _MissionWindowState extends State<MissionWindow> {
     () async {
       mission = await _authController.playMission(missionId[0]);
       if (mission == null) return;
-      final url = '${dotenv.env['db_url']}${mission['video']['video_url']}';
-      await controller.initializePlayer(url);
+      if (mission['video'] == null) {
+        Get.back();
+        Get.snackbar('Error', 'Video could not be played or does not exist.',
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+        return;
+      };
+      try {
+        final url = '${dotenv.env['db_url']}${mission['video']['video_url']}';
+        await controller.initializePlayer(url);
+      }catch(e){print('went wrong while playing video');}
       setState(() {
         // Update your UI with the desired changes.
         return;

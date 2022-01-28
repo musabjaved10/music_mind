@@ -15,7 +15,7 @@ class SleepController extends GetxController {
   getCourses() async {
     List my_courses = [].obs;
 
-    final url = Uri.parse('${dotenv.env['db_url']}/category/8');
+    final url = Uri.parse('${dotenv.env['db_url']}/category/3');
 
     try {
       final res = await http.get(url, headers: {
