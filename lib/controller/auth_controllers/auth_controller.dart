@@ -122,7 +122,7 @@ class AuthController extends GetxController{
        icon: Icon(Icons.password, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    await _auth.sendPasswordResetEmail(email: emailController.text).then((value)async {
      Get.snackbar('Success','Please check your email.',
-         icon: Icon(Icons.password, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+         icon: Icon(Icons.email, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    }).catchError((onError) {
      print(onError.message);
      Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
