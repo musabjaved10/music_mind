@@ -31,8 +31,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   void initState(){
         () async {
-      // print('hello there **********');
+      print('hello there **********');
           if (Get.find<AuthController>().user != null) {
+            print('hello there **********');
             await _mindController.getCourses();
             await _bodyController.getCourses();
             await _sleepController.getCourses();
@@ -40,7 +41,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             await _workController.getCourses();
              _isLoading = false;
           }
-      await Future.delayed(Duration(milliseconds: 1200));
+      await Future.delayed(Duration(milliseconds: 400));
         _isLoading = false;
         if(mounted){
           setState(() {

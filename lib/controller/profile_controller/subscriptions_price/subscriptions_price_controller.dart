@@ -6,6 +6,7 @@ import 'package:music_mind_client/controller/auth_controllers/auth_controller.da
 import 'package:music_mind_client/model/profile_model/subscriptions_price/subscriptions_price_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class SubscriptionsPriceController extends GetxController {
   final AuthController _authController = Get.find<AuthController>();
@@ -124,8 +125,15 @@ class SubscriptionsPriceController extends GetxController {
     }
   }
 
-  Future makePayment (subId) async{
+  Future makePayment (subId, context) async{
+    final payment_dialog = ProgressDialog(context: context);
+    var paymentIntentData;
     try{
+      payment_dialog.show(
+        max: 1,
+        msg: 'Processing Payment',
+        progressBgColor: Colors.transparent,
+      );
       final url = Uri.parse('${dotenv.env['db_url']}/subscription/$subId/payment-info');
       final res = await http.get(url, headers: {
         "uid": "${_authController.getUserId()}",
@@ -133,28 +141,70 @@ class SubscriptionsPriceController extends GetxController {
       });
 
       final resData =  jsonDecode(res.body);
-      print(resData);
       if(resData['response'] == 200) {
-        final paymentIntentData = resData['success']['data']['payment_sheet'];
+         paymentIntentData = resData['success']['data']['payment_sheet'];
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
                 applePay: false,
-                googlePay: false,
+                googlePay: true,
                 paymentIntentClientSecret: paymentIntentData['paymentIntent'],
                 customerId: paymentIntentData['customer'],
                 customerEphemeralKeySecret: paymentIntentData['ephemeralKey'],
                 merchantDisplayName: 'Test merchant',
             )
         );
+        payment_dialog.close();
         await Stripe.instance.presentPaymentSheet();
+        payment_dialog.show(
+          max: 1,
+          msg: 'Confirming payment',
+          progressBgColor: Colors.transparent,
+        );
+        final response = await http.post(Uri.parse('${dotenv.env['db_url']}/payment'), headers: {
+          "uid": "${_authController.getUserId()}",
+          "api-key" : "${dotenv.env['api_key']}",
+          "Content-Type" : "application/json"
+        }, body: json.encode({
+          'paymentIntent': paymentIntentData['paymentIntent'],
+          'ephemeralKey': paymentIntentData['ephemeralKey'],
+          'status': "1",
+        }));
+        final feedback = jsonDecode(response.body);
+        print(feedback);
+        if(feedback['response'] == 200){
+          payment_dialog.close();
+          Get.snackbar('Success', 'Payment completed',
+              snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+        }
+        payment_dialog.isOpen() ? payment_dialog.close() : null;
+
       }else if ((resData['response'] != 200) &&
           (resData['errors'] != null)){
+        payment_dialog.close();
         Get.back();
         Get.snackbar('Error', resData['errors'].keys.toList().first,
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
       }
-    }catch(e){
-      print('printing error for payments $e');
+    }on StripeException catch(e){
+      payment_dialog.isOpen() ? payment_dialog.close() : null;
+      final failedResponse = await http.post(Uri.parse('${dotenv.env['db_url']}/payment'), headers: {
+        "uid": "${_authController.getUserId()}",
+        "api-key" : "${dotenv.env['api_key']}",
+        "Content-Type" : "application/json"
+      }, body: json.encode({
+        'paymentIntent': paymentIntentData['paymentIntent'],
+        'ephemeralKey': paymentIntentData['ephemeralKey'],
+        'status': "-1",
+      }));
+      print(failedResponse.body);
+      // // send api pending-0
+      Get.snackbar('Error', '${e.error.message}',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+    }catch (e){
+      payment_dialog.isOpen() ? payment_dialog.close() : null;
+      print('printing error for api $e');
+      Get.snackbar('Error', 'Unable to process payment.',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
     }
   }
 

@@ -39,7 +39,7 @@ class _OrderSummaryState extends State<OrderSummary> {
   @override
   Widget build(BuildContext context) {
     final trial_dialog = ProgressDialog(context: context,);
-    final payment_dialog = ProgressDialog(context: context);
+
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -84,22 +84,22 @@ class _OrderSummaryState extends State<OrderSummary> {
               color: KGrey2Color,
             ),
           ),
-          // ListTile(
-          //   title: MyText(
-          //     text: 'Free Trial',
-          //     size: 14,
-          //     color: KSecondaryColor,
-          //     weight: FontWeight.w500,
-          //   ),
-          //   trailing: MyText(
-          //     text: '7 days',
-          //     size: 14,
-          //     color: KGrey2Color,
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 15,
-          // ),
+          ListTile(
+            title: MyText(
+              text: 'Free Trial',
+              size: 14,
+              color: KSecondaryColor,
+              weight: FontWeight.w500,
+            ),
+            trailing: MyText(
+              text: '7 days',
+              size: 14,
+              color: KGrey2Color,
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
           const Divider(
             color: KSecondaryColor,
             indent: 15,
@@ -117,19 +117,6 @@ class _OrderSummaryState extends State<OrderSummary> {
             ),
             trailing: MyText(
               text: '${sub['subscription']['currency']['symbol']}${sub['subscription']['price']}',
-              size: 14,
-              color: KGrey2Color,
-            ),
-          ),
-          ListTile(
-            title: MyText(
-              text: 'Sales Tax (9%)',
-              size: 14,
-              color: KSecondaryColor,
-              weight: FontWeight.w500,
-            ),
-            trailing: MyText(
-              text: '${sub['subscription']['currency']['symbol']}${sub['subscription']['sales_tax_price']}',
               size: 14,
               color: KGrey2Color,
             ),
@@ -197,14 +184,17 @@ class _OrderSummaryState extends State<OrderSummary> {
                 },
                 text: 'Activate Free Trial',
                 btnBgColor: KSecondaryColor,
-              ): MyButton(
+              ):sub['trial']['is_active'] == false ? MyButton(
                 onPressed: () async{
-                  final pay_res = await controller.makePayment(id[0]);
-                  print('printing apying resssssss $pay_res');
+                  final pay_res = await controller.makePayment(id[0], context);
                 },
                 text: 'Pay now',
                 btnBgColor: KSecondaryColor,
-              ),
+              ): MyButton(
+                 onPressed: null,
+                 text: 'Free trial is activated',
+                 btnBgColor: KSecondaryColor,
+               ),
             ],
           ),
         ),

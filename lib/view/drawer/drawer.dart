@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
+import 'package:music_mind_client/controller/profile_controller/profile_controller.dart';
 import 'package:music_mind_client/view/profile/account.dart';
 import 'package:music_mind_client/view/profile/subscriptions_pricing.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
@@ -14,10 +15,13 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   bool? profileVisibility = false;
   AuthController _authController = Get.find<AuthController>();
+  var image;
   @override
   void initState(){
         () async {
       await _authController.getUserData();
+      image = await Get.find<ProfileController>().getImageFromStorage('${Get.find<AuthController>().getUserId()}');
+
       if(mounted) {
         setState(() {
           null;
@@ -51,8 +55,13 @@ class _MyDrawerState extends State<MyDrawer> {
                   color: KGreyColor,
                   size: 12,
                 ),
-                trailing: Image.asset(
+                trailing: image == null ? Image.asset(
                   'assets/unsplash3JmfENcL24M.png',
+                  height: 56,
+                  width: 56,
+                  fit: BoxFit.cover,
+                ): Image.memory(
+                  image,
                   height: 56,
                   width: 56,
                   fit: BoxFit.cover,

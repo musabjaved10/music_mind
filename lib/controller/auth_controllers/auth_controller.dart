@@ -112,9 +112,23 @@ class AuthController extends GetxController{
    Get.offAll(()=>BottomNavBar());
   }).catchError((onError) {
    Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
-   Get.offAll(()=>Login());
+   // Get.offAll(()=>Login());
   });
   }
+
+  //password reset function
+ void resetPassword() async {
+   Get.snackbar('Please Wait','Sending password reset link.',
+       icon: Icon(Icons.password, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+   await _auth.sendPasswordResetEmail(email: emailController.text).then((value)async {
+     Get.snackbar('Success','Please check your email.',
+         icon: Icon(Icons.password, color: Colors.blueAccent),snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+   }).catchError((onError) {
+     print(onError.message);
+     Get.snackbar('Error', onError.message, snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+     // Get.offAll(()=>Login());
+   });
+ }
 
  void signOut() async{
    Get.snackbar('Goodbye', 'See you again', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);

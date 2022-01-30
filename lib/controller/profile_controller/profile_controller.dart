@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileController extends GetxController {
   late TextEditingController emailController_p,
@@ -101,6 +104,38 @@ class ProfileController extends GetxController {
 
     }
   }
+  Future<bool> saveImageTOStorage(String value)async{
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.setString('${_authController.getUserId()}', value);
+  }
+
+   getImageFromStorage(String value) async{
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final image =  preferences.getString('${_authController.getUserId()}');
+    if(image == null) {
+      return null;
+    } else{
+      return base64Decode(image);
+    }
+  }
+
+  Future uploadImage () async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        Get.snackbar('','Image was not selected',snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white, duration: const Duration(seconds: 1));
+        return null;
+      }
+      final imageTemporary = File(image.path);
+      saveImageTOStorage(base64Encode(imageTemporary.readAsBytesSync()));
+      return imageTemporary;
+    }catch(e){
+      print('Error in priting Image $e');
+      return;
+    }
+  }
+
+
 
 
 }

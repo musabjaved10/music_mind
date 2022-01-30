@@ -34,8 +34,9 @@ class _MyTextFieldState extends State<MyTextField> {
             height: 10,
           ),
           TextFormField(
+            initialValue: widget.controller?.text,
             onChanged: (value){
-              print(value);
+              // print(value);
               widget.controller?.text = value;
             },
             textAlignVertical: TextAlignVertical.center,

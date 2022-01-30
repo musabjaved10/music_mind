@@ -38,10 +38,13 @@ class Login extends GetWidget<AuthController> {
                   obsecure: true,
                   controller: controller.passController,
                 ),
-                MyText(
-                  text: 'Forgot Passoword?',
-                  size: 16,
-                  weight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () => controller.resetPassword(),
+                  child: MyText(
+                    text: 'Forgot Password?',
+                    size: 16,
+                    weight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -49,27 +52,27 @@ class Login extends GetWidget<AuthController> {
               onPressed: () {controller.login(controller.emailController.text, controller.passController.text);},
               text: 'Login',
             ),
-            MyText(
-              text: 'or continue with',
-              size: 14,
-              align: TextAlign.center,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/Group.png',
-                  height: 28,
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Image.asset(
-                  'assets/Group 17.png',
-                  height: 28,
-                ),
-              ],
-            ),
+            // MyText(
+            //   text: 'or continue with',
+            //   size: 14,
+            //   align: TextAlign.center,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Image.asset(
+            //       'assets/Group.png',
+            //       height: 28,
+            //     ),
+            //     const SizedBox(
+            //       width: 30,
+            //     ),
+            //     Image.asset(
+            //       'assets/Group 17.png',
+            //       height: 28,
+            //     ),
+            //   ],
+            // ),
             GestureDetector(
               onTap: () => Get.to(() => Register()),
               child: RichText(

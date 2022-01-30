@@ -22,6 +22,9 @@ dependencies:
   chewie: ^1.2.2
   flutter_stripe: ^2.1.1
   sn_progress_dialog: ^1.0.3
+  image_picker: ^0.8.4+5
+  path: ^1.8.0
+  shared_preferences: ^2.0.12
 
 dev_dependencies:
   flutter_test:
