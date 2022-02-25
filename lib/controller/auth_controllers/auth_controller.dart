@@ -131,7 +131,6 @@ class AuthController extends GetxController{
  }
 
  void signOut() async{
-   Get.snackbar('Goodbye', 'See you again', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
    await _auth.signOut().then((value) => Get.offAll(()=> Login()));
  }
 

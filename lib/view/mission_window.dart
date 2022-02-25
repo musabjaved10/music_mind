@@ -18,7 +18,6 @@ class _MissionWindowState extends State<MissionWindow> {
 
   var missionId = Get.arguments;
   var mission;
-  var _isLoading = false;
 
   @override
   void initState() {
@@ -45,26 +44,42 @@ class _MissionWindowState extends State<MissionWindow> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+
+    if (controller.chewieController!.isPlaying) controller.chewieController!.pause();
+    controller.chewieController!.removeListener(() { });
+    controller.chewieController = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: controller.chewieController != null &&
                   controller.chewieController!.videoPlayerController.value
-                      .isInitialized
+                      .isInitialized && mission !=null
               ? Text(
-                  '${mission['level']['name']}: ${mission['level']['course']['name']}')
-              : const Text(''),
+                  '${ mission['level']['name']}: ${mission['level']['course']['name']}')
+              : const Text('')
         ),
         body:  Center(
                 child: controller.chewieController != null &&
                         controller.chewieController!.videoPlayerController.value
                             .isInitialized
-                    ? Container(
-                        height: size.height * 0.5,
-                        child: Chewie(controller: controller.chewieController!))
+                    ? Column(
+                      children: [
+                        Text('Video title: ${mission['video']['title']}', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                        SizedBox(height: size.height * 0.1,),
+                        SizedBox(
+                            height: size.height * 0.5,
+                            child: Chewie(controller: controller.chewieController!)),
+                      ],
+                    )
                     : const Text(
-                        'Please wait...',
+                        'Fetching...',
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       )));
   }

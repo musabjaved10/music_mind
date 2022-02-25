@@ -28,10 +28,18 @@ class CoursesWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15, bottom: 20),
-                    child: MyText(
-                      text: '${courseData.courseName}',
-                      size: 18,
-                      weight: FontWeight.w600,
+                    child: Row(
+                      children: [
+                        MyText(
+                          text: '${courseData.courseName}',
+                          size: 18,
+                          weight: FontWeight.w600,
+                        ),
+                        courseData.isCourseComplete == true ? Image.asset(
+                          'assets/akar-iconscircle-check.png',
+                          height: 16,
+                        ): const SizedBox.shrink(),
+                      ],
                     ),
                   ),
                   SizedBox(

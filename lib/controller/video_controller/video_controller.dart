@@ -28,7 +28,7 @@ class VideoController extends GetxController{
         materialProgressColors: ChewieProgressColors(
           handleColor: Colors.yellowAccent,
           playedColor: Colors.red,
-          backgroundColor: KPrimaryColor
+          // backgroundColor: KPrimaryColor
         ),
         autoInitialize: true
     );

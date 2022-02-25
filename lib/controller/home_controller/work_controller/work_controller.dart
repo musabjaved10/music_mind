@@ -54,6 +54,7 @@ class WorkController extends GetxController {
               levelName: 'Level 1',
               missionName: 'Mission A',
               courseName: course['name'],
+              isCourseComplete: course['is_completed'] && true,
               // onTap: () => Get.to(() => WorkMission()),
               coursesThumbnailData: coursesThumbnailList));
         });
