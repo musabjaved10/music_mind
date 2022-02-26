@@ -12,7 +12,7 @@ class Register extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: ListView(
         padding: defaultPadding,
         physics: const BouncingScrollPhysics(),
@@ -56,6 +56,7 @@ class Register extends GetWidget<AuthController> {
                 hintText: '********',
                 obsecure: true,
                 controller: controller.passController,
+                  inputIcon: const Icon(Icons.visibility)
               ),
             ],
           ),

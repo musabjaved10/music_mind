@@ -12,6 +12,7 @@ class MindController extends GetxController {
   AuthController _authController = Get.find<AuthController>();
   int currentIndex = 0;
   List coursesData = [].obs;
+  Map lastLeft = {}.obs;
 
   getCourses() async {
     List my_courses = [].obs;
@@ -24,19 +25,10 @@ class MindController extends GetxController {
         "api-key": "${dotenv.env['api_key']}"
       });
       final resData = jsonDecode(res.body);
-      print('printing response data for mind $resData');
+      // print('printing response data for mind $resData');
       if (resData['response'] == 200) {
         final courses = resData['success']['data']['category']['courses'];
-
-        // for (int i = 0; i < courses.length; i++) {
-        //   CoursesWidgetModel(
-        //     courseIcon: 'assets/bxbxs-brain.png',
-        //     courseType: 'Mind',
-        //     levelName: 'Level ${i+1}',
-        //     missionName: 'Mission A',
-        //     courseName: course['name'],
-        //   );
-        // }
+        lastLeft = resData['success']['data']['category']['where_you_left'];
 
         await courses.forEach((course) {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];

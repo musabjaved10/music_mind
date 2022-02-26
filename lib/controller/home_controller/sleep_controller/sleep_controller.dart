@@ -11,6 +11,8 @@ class SleepController extends GetxController {
   AuthController _authController = Get.find<AuthController>();
   int currentIndex = 0;
   List coursesData = [].obs;
+  Map lastLeft = {}.obs;
+
 
   getCourses() async {
     List my_courses = [].obs;
@@ -25,16 +27,8 @@ class SleepController extends GetxController {
       final resData = jsonDecode(res.body);
       if (resData['response'] == 200) {
         final courses = resData['success']['data']['category']['courses'];
+        lastLeft = resData['success']['data']['category']['where_you_left'];
 
-        // for (int i = 0; i < courses.length; i++) {
-        //   CoursesWidgetModel(
-        //     courseIcon: 'assets/bxbxs-brain.png',
-        //     courseType: 'Mind',
-        //     levelName: 'Level ${i+1}',
-        //     missionName: 'Mission A',
-        //     courseName: course['name'],
-        //   );
-        // }
 
         await courses.forEach((course) {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];

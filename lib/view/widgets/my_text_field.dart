@@ -8,20 +8,31 @@ class MyTextField extends StatefulWidget {
   int? maxlines;
   VoidCallback? onSaved;
   TextEditingController? controller = TextEditingController();
+  Icon? inputIcon;
 
-  MyTextField({Key? key,
-    this.hintText,
-    this.label,
-    this.maxlines = 1,
-    this.obsecure = false,
-    this.controller,
-  }) : super(key: key);
+  MyTextField(
+      {Key? key,
+      this.hintText,
+      this.label,
+      this.maxlines = 1,
+      this.obsecure = false,
+      this.controller,
+      this.inputIcon = null})
+      : super(key: key);
 
   @override
   _MyTextFieldState createState() => _MyTextFieldState();
 }
 
 class _MyTextFieldState extends State<MyTextField> {
+  var isObscure = false;
+
+  @override
+  void initState() {
+    isObscure = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,7 +46,7 @@ class _MyTextFieldState extends State<MyTextField> {
           ),
           TextFormField(
             initialValue: widget.controller?.text,
-            onChanged: (value){
+            onChanged: (value) {
               // print(value);
               widget.controller?.text = value;
             },
@@ -46,9 +57,22 @@ class _MyTextFieldState extends State<MyTextField> {
               color: KSecondaryColor,
               fontSize: 16,
             ),
-            obscureText: widget.obsecure!,
+            obscureText: isObscure,
             obscuringCharacter: "*",
             decoration: InputDecoration(
+              suffixIcon: IconButton(
+                  color: Colors.white,
+                  onPressed: () {
+                    widget.inputIcon != null ?
+                    setState(() {
+                      isObscure = !isObscure;
+                    }) : null;
+                  },
+                  icon: widget.inputIcon == null
+                      ? Icon(null)
+                      : isObscure == true
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off)),
               hintText: '${widget.hintText}',
               hintStyle: const TextStyle(
                 color: KGrey2Color,

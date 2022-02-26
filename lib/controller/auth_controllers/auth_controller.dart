@@ -151,6 +151,35 @@ class AuthController extends GetxController{
    }
  }
 
+ Future getNext(missionId) async{
+   try{
+     var nextObj = {};
+     final user_id = _auth.currentUser?.uid;
+     final url = Uri.parse('${dotenv.env['db_url']}/mission/$missionId');
+     final res = await http.get(url, headers: {"uid": "${user_id}", "api-key": "${dotenv.env['api_key']}"});
+     final resData = jsonDecode(res.body);
+     print(resData);
+     if(resData['response'] == 200 ) {
+       nextObj = {...resData['success']['data']['next']};
+       return nextObj;
+     }else if((resData['response'] !=200) && (resData['errors'] != null)){
+       Get.back();
+       Get.snackbar('Error', resData['errors'].values.toList().first,
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white, duration: const Duration(milliseconds: 900));
+       return null;
+     }
+     else{
+       Get.back();
+       Get.snackbar('Error', 'Video could not be played or does not exist.',
+           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+       return null;
+     }
+   }catch(e){
+     Get.back();
+     Get.snackbar('Error', 'Something went wrong', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+     print('error in playing mission $e');
+   }
+ }
  Future playMission(missionId) async{
    try{
      var mission = {};

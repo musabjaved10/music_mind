@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/controller/profile_controller/subscriptions_price/subscriptions_price_controller.dart';
 import 'package:music_mind_client/view/profile/payment.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
@@ -17,6 +18,7 @@ class OrderSummary extends StatefulWidget {
 class _OrderSummaryState extends State<OrderSummary> {
   var _isLoading = true;
   final SubscriptionsPriceController controller = Get.put(SubscriptionsPriceController());
+  final AuthController _authController = Get.find<AuthController>();
   final id = Get.arguments;
   var sub;
 
@@ -39,7 +41,7 @@ class _OrderSummaryState extends State<OrderSummary> {
   @override
   Widget build(BuildContext context) {
     final trial_dialog = ProgressDialog(context: context,);
-
+    final userData = _authController.userData;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -163,7 +165,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-               sub['trial'] == null ? MyButton(
+               userData['is_trial_taken'] == false ? MyButton(
                 onPressed: () async{
                   trial_dialog.show(
                     max: 1,
@@ -184,15 +186,21 @@ class _OrderSummaryState extends State<OrderSummary> {
                 },
                 text: 'Activate Free Trial',
                 btnBgColor: KSecondaryColor,
-              ):sub['trial']['is_active'] == false ? MyButton(
+              ):userData['is_trial_end'] == true ? MyButton(
                 onPressed: () async{
                   final pay_res = await controller.makePayment(id[0], context);
                 },
                 text: 'Pay now',
                 btnBgColor: KSecondaryColor,
-              ): MyButton(
-                 onPressed: null,
-                 text: 'Free trial is activated',
+              ): userData['is_fee_paid'] == true ?
+               MyButton(
+                 onPressed: (){},
+                 text: 'Fee has been paid.',
+                 btnBgColor: KSecondaryColor,
+               ):
+               MyButton(
+                 onPressed: (){},
+                 text: 'You\'re currently having free trial',
                  btnBgColor: KSecondaryColor,
                ),
             ],

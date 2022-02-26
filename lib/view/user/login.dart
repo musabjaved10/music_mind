@@ -35,8 +35,8 @@ class Login extends GetWidget<AuthController> {
                 MyTextField(
                   label: 'Password',
                   hintText: controller.passController.text.isEmpty ? '********': '*' * controller.passController.text.length,
-                  obsecure: true,
                   controller: controller.passController,
+                  inputIcon: const Icon(Icons.visibility),
                 ),
                 GestureDetector(
                   onTap: () => controller.resetPassword(),

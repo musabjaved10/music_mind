@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
+import 'package:music_mind_client/view/profile/subscriptions_pricing.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 
@@ -49,7 +51,9 @@ class OfferCard extends StatelessWidget {
                           weight: FontWeight.w700,
                         ),
                         MyButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(SubscriptionsPricing());
+                          },
                           textSize: 8,
                           weight: FontWeight.w700,
                           text: 'Get Offer Now',

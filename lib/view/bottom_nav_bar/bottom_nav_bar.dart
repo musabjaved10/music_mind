@@ -9,6 +9,12 @@ import 'package:music_mind_client/controller/home_controller/mind_Controller/min
 import 'package:music_mind_client/controller/home_controller/sleep_controller/sleep_controller.dart';
 import 'package:music_mind_client/controller/home_controller/work_controller/work_controller.dart';
 import 'package:music_mind_client/view/drawer/drawer.dart';
+import 'package:music_mind_client/view/home/body/body_missions/body_missions.dart';
+import 'package:music_mind_client/view/home/learn/learn_missions/learn_missions.dart';
+import 'package:music_mind_client/view/home/mind/mind_missions/mind_missions.dart';
+import 'package:music_mind_client/view/home/sleep/sleep_missions/sleep_missions.dart';
+import 'package:music_mind_client/view/home/work/work_mission/work_mission.dart';
+import 'package:music_mind_client/view/mission_window.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
 import 'package:music_mind_client/view/widgets/offer_card.dart';
@@ -31,9 +37,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   void initState(){
         () async {
-      print('hello there **********');
           if (Get.find<AuthController>().user != null) {
-            print('hello there **********');
             await _mindController.getCourses();
             await _bodyController.getCourses();
             await _sleepController.getCourses();
@@ -205,6 +209,21 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
 class CurrentPlaying extends StatelessWidget {
   var controller;
+  Map index = {
+    'Mind' : 0,
+    'Body' : 1,
+    'Work' : 2,
+    'Learn': 3,
+    'Sleep': 4
+  };
+  List screens = [
+     MindMissions(),
+     BodyMissions(),
+     WorkMission(),
+     LearnMissions(),
+     SleepMissions()
+  ];
+
 
   CurrentPlaying({
     this.controller,
@@ -212,6 +231,7 @@ class CurrentPlaying extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final missionId = controller.lastLeft['mission_id'];
     return controller.coursesData.isEmpty ? Center(child:Text('No Courses yet', style: TextStyle(color: Colors.white, fontSize: 15),)) : Align(
       alignment: Alignment.bottomCenter,
       child: Card(
@@ -239,16 +259,20 @@ class CurrentPlaying extends StatelessWidget {
           ),
           subtitle: MyText(
             text:
-                '${controller.coursesData[controller.currentIndex].levelName} | ${controller.coursesData[controller.currentIndex].missionName}',
+                '${controller.lastLeft['mission_name']}',
             size: 12,
             maxlines: 2,
             color: KGreyColor,
             weight: FontWeight.w700,
           ),
-          trailing: Image.asset(
-            'assets/biplay-fill.png',
-            color: KBlackColor,
-            height: 30,
+          trailing: GestureDetector(
+            onTap: () =>
+              Get.to(() =>MissionWindow(), arguments: [missionId.substring(missionId.length -1)]),
+            child: Image.asset(
+              'assets/biplay-fill.png',
+              color: KBlackColor,
+              height: 30,
+            ),
           ),
         ),
       ),

@@ -11,10 +11,11 @@ import 'package:http/http.dart' as http;
 class LearnController extends GetxController {
   AuthController _authController = Get.find<AuthController>();
   int currentIndex = 0;
-  List my_courses = [].obs;
   List coursesData = [].obs;
+  Map lastLeft = {}.obs;
 
   getCourses() async {
+    List my_courses = [].obs;
     final url = Uri.parse('${dotenv.env['db_url']}/category/4');
 
     try {
@@ -25,16 +26,7 @@ class LearnController extends GetxController {
       final resData = jsonDecode(res.body);
       if (resData['response'] == 200) {
         final courses = resData['success']['data']['category']['courses'];
-
-        // for (int i = 0; i < courses.length; i++) {
-        //   CoursesWidgetModel(
-        //     courseIcon: 'assets/bxbxs-brain.png',
-        //     courseType: 'Mind',
-        //     levelName: 'Level ${i+1}',
-        //     missionName: 'Mission A',
-        //     courseName: course['name'],
-        //   );
-        // }
+        lastLeft = resData['success']['data']['category']['where_you_left'];
 
         await courses.forEach((course) {
           List<CoursesThumbnailsModel> coursesThumbnailList = [];

@@ -118,18 +118,18 @@ class _MyDrawerState extends State<MyDrawer> {
               //     inactiveTrackColor: KGreyColor,
               //   ),
               // ),
-              ListTile(
-                onTap: () {},
-                title: MyText(
-                  text: 'Blocked Members',
-                  size: 16,
-                  weight: FontWeight.w600,
-                ),
-                trailing: Image.asset(
-                  'assets/arrow_forward.png',
-                  height: 15,
-                ),
-              ),
+              // ListTile(
+              //   onTap: () {},
+              //   title: MyText(
+              //     text: 'Blocked Members',
+              //     size: 16,
+              //     weight: FontWeight.w600,
+              //   ),
+              //   trailing: Image.asset(
+              //     'assets/arrow_forward.png',
+              //     height: 15,
+              //   ),
+              // ),
               const SizedBox(
                 height: 20,
               ),
@@ -162,18 +162,18 @@ class _MyDrawerState extends State<MyDrawer> {
               const SizedBox(
                 height: 30,
               ),
-              ListTile(
-                onTap: () {},
-                title: MyText(
-                  text: 'About Apps',
-                  size: 16,
-                  weight: FontWeight.w600,
-                ),
-                trailing: Image.asset(
-                  'assets/arrow_forward.png',
-                  height: 15,
-                ),
-              ),
+              // ListTile(
+              //   onTap: () {},
+              //   title: MyText(
+              //     text: 'About Apps',
+              //     size: 16,
+              //     weight: FontWeight.w600,
+              //   ),
+              //   trailing: Image.asset(
+              //     'assets/arrow_forward.png',
+              //     height: 15,
+              //   ),
+              // ),
               const SizedBox(
                 height: 50,
               ),
