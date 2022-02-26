@@ -16,7 +16,6 @@ class BodyMissionController extends GetxController {
 
   getMissions(levelId) async {
     final url = Uri.parse('${dotenv.env['db_url']}/level/$levelId');
-    print(url);
     try{
       final res = await http.get(url, headers: {"uid": "${_authController.getUserId()}", "api-key": "${dotenv.env['api_key']}"});
       final resData = jsonDecode(res.body);

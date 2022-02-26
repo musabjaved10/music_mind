@@ -41,7 +41,6 @@ class SubscriptionsPriceController extends GetxController {
 
       }else if ((resData['response'] != 200) &&
           (resData['errors'] != null)){
-        print(resData['errors'].runtimeType);
         Get.back();
         Get.snackbar('Error', resData['errors'].values.toList().first,
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
@@ -56,7 +55,6 @@ class SubscriptionsPriceController extends GetxController {
   }
 
   Future getSubById (id) async{
-    print('printing sub id $id');
     final url = Uri.parse('${dotenv.env['db_url']}/subscription/$id');
     try{
       final res = await http.get(url, headers: {
@@ -71,7 +69,6 @@ class SubscriptionsPriceController extends GetxController {
 
       }else if ((resData['response'] != 200) &&
           (resData['errors'] != null)){
-        print(resData['errors'].runtimeType);
         Get.back();
         Get.snackbar('Error', resData['errors'].values.toList().first,
             snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
@@ -92,7 +89,6 @@ class SubscriptionsPriceController extends GetxController {
         "api-key" : "${dotenv.env['api_key']}"
       });
       final resData = jsonDecode(res.body);
-      print(resData);
       if(resData['response'] == 200){
         return 200;
 
@@ -152,7 +148,6 @@ class SubscriptionsPriceController extends GetxController {
           'status': "1",
         }));
         final feedback = jsonDecode(response.body);
-        print(feedback);
         if(feedback['response'] == 200){
           payment_dialog.close();
           Get.snackbar('Success', 'Payment completed',
@@ -178,7 +173,6 @@ class SubscriptionsPriceController extends GetxController {
         'ephemeralKey': paymentIntentData['ephemeralKey'],
         'status': "-1",
       }));
-      print(failedResponse.body);
       // // send api pending-0
       Get.snackbar('Error', '${e.error.message}',
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);

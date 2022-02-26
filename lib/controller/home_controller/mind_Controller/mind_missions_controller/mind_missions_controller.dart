@@ -16,7 +16,7 @@ class MindMissionsController extends GetxController {
 
   getMissions(levelId) async {
     final url = Uri.parse('${dotenv.env['db_url']}/level/$levelId');
-    print(url);
+    // print(url);
     try {
       final res = await http.get(url, headers: {
         "uid": "${_authController.getUserId()}",
@@ -26,7 +26,7 @@ class MindMissionsController extends GetxController {
       if (resData['response'] == 200) {
         final level = resData['success']['data']['level'];
         final level_missions = resData['success']['data']['level']['missions'];
-        print(level_missions);
+        // print(level_missions);
         List<MissionsData> missionsList = [];
         await level_missions.forEach((mission) {
           // print(course['levels']);
