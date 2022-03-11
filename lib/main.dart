@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
-  Stripe.publishableKey = 'pk_test_neFiWZmP73t6MxcbqrATir3y00YX32CRnz';
+  Stripe.publishableKey = '${dotenv.env['stripe_key']}';
   runApp(MusicMindApp());
 }
 

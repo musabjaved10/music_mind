@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:music_mind_client/constants/constants.dart';
 import 'package:music_mind_client/controller/auth_controllers/auth_controller.dart';
 import 'package:music_mind_client/controller/profile_controller/subscriptions_price/subscriptions_price_controller.dart';
-import 'package:music_mind_client/view/profile/payment.dart';
 import 'package:music_mind_client/view/widgets/my_app_bar.dart';
 import 'package:music_mind_client/view/widgets/my_button.dart';
 import 'package:music_mind_client/view/widgets/my_text.dart';
@@ -165,7 +164,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-               userData['is_trial_taken'] == false ? MyButton(
+               userData['is_trial_taken'] == false && userData['is_trial_end'] == false ? MyButton(
                 onPressed: () async{
                   trial_dialog.show(
                     max: 1,
@@ -186,18 +185,19 @@ class _OrderSummaryState extends State<OrderSummary> {
                 },
                 text: 'Activate Free Trial',
                 btnBgColor: KSecondaryColor,
-              ):userData['is_trial_end'] == true ? MyButton(
-                onPressed: () async{
-                  final pay_res = await controller.makePayment(id[0], context);
-                },
-                text: 'Pay now',
-                btnBgColor: KSecondaryColor,
-              ): userData['is_fee_paid'] == true ?
+              ):userData['is_fee_paid'] == true ?
                MyButton(
                  onPressed: (){},
                  text: 'Fee has been paid.',
                  btnBgColor: KSecondaryColor,
                ):
+               userData['is_trial_end'] == true ? MyButton(
+                onPressed: () async{
+                  final pay_res = await controller.makePayment(id[0], context);
+                },
+                text: 'Pay now',
+                btnBgColor: KSecondaryColor,
+              ):
                MyButton(
                  onPressed: (){},
                  text: 'You\'re currently having free trial',

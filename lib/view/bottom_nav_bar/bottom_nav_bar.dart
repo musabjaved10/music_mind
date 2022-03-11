@@ -108,17 +108,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     : KGrey2Color,
                 height: 28,
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(
-                  text: 'Mind',
-                  color: controller.currentIndex == 0
-                      ? KSecondaryColor
-                      : KGrey2Color,
-                  size: 12,
-                  weight: FontWeight.w500,
-                ),
-              ),
+              label: 'Mind'
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: MyText(
+              //     text: 'Mind',
+              //     color: controller.currentIndex == 0
+              //         ? KSecondaryColor
+              //         : KGrey2Color,
+              //     size: 12,
+              //     weight: FontWeight.w500,
+              //   ),
+              // ),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -128,17 +129,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     : KGrey2Color,
                 height: 28,
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(
-                  text: 'Body',
-                  color: controller.currentIndex == 1
-                      ? KSecondaryColor
-                      : KGrey2Color,
-                  size: 12,
-                  weight: FontWeight.w500,
-                ),
-              ),
+              label: "Body"
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: MyText(
+              //     text: 'Body',
+              //     color: controller.currentIndex == 1
+              //         ? KSecondaryColor
+              //         : KGrey2Color,
+              //     size: 12,
+              //     weight: FontWeight.w500,
+              //   ),
+              // ),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -148,17 +150,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     : KGrey2Color,
                 height: 28,
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(
-                  text: 'Sleep',
-                  color: controller.currentIndex == 2
-                      ? KSecondaryColor
-                      : KGrey2Color,
-                  size: 12,
-                  weight: FontWeight.w500,
-                ),
-              ),
+              label: "sleep"
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: MyText(
+              //     text: 'Sleep',
+              //     color: controller.currentIndex == 2
+              //         ? KSecondaryColor
+              //         : KGrey2Color,
+              //     size: 12,
+              //     weight: FontWeight.w500,
+              //   ),
+              // ),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -168,17 +171,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     : KGrey2Color,
                 height: 28,
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(
-                  text: 'Learn',
-                  color: controller.currentIndex == 3
-                      ? KSecondaryColor
-                      : KGrey2Color,
-                  size: 12,
-                  weight: FontWeight.w500,
-                ),
-              ),
+              label: "Learn"
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: MyText(
+              //     text: 'Learn',
+              //     color: controller.currentIndex == 3
+              //         ? KSecondaryColor
+              //         : KGrey2Color,
+              //     size: 12,
+              //     weight: FontWeight.w500,
+              //   ),
+              // ),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -188,17 +192,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     : KGrey2Color,
                 height: 28,
               ),
-              title: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(
-                  text: 'Work',
-                  color: controller.currentIndex == 4
-                      ? KSecondaryColor
-                      : KGrey2Color,
-                  size: 12,
-                  weight: FontWeight.w500,
-                ),
-              ),
+              label: 'Work',
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: MyText(
+              //     text: 'Work',
+              //     color: controller.currentIndex == 4
+              //         ? KSecondaryColor
+              //         : KGrey2Color,
+              //     size: 12,
+              //     weight: FontWeight.w500,
+              //   ),
+              // ),
             ),
           ],
         ),
